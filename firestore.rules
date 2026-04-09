@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------------------
+    // ADMIN: debe coincidir EXACTAMENTE con el correo del usuario en
+    // Firebase Authentication (mismo string). Si cambias el usuario admin,
+    // actualiza este literal y vuelve a publicar las reglas.
+    // -------------------------------------------------------------------------
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email is string
+        && request.auth.token.email == "admin@example.com";
+    }
+
+    // Colección: misma base que NEXT_PUBLIC_FIRESTORE_CONTACT_COLLECTION (default contact_requests).
+
+    match /contact_requests/{docId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'name',
+          'email',
+          'message',
+          'company',
+          'phone',
+          'requirementType',
+          'userAgent',
+          'source',
+          'createdAt',
+        ])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 200
+        && request.resource.data.email is string
+        && request.resource.data.email.size() >= 5
+        && request.resource.data.email.size() <= 320
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 10
+        && request.resource.data.message.size() <= 8000
+        && request.resource.data.company is string
+        && request.resource.data.company.size() <= 200
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() <= 80
+        && request.resource.data.requirementType is string
+        && request.resource.data.requirementType.size() <= 64
+        && request.resource.data.userAgent is string
+        && request.resource.data.userAgent.size() <= 512
+        && request.resource.data.source == 'aurora-web'
+        && request.resource.data.createdAt is string
+        && request.resource.data.createdAt.size() <= 40;
+
+      allow read: if isAdmin();
+      allow delete: if isAdmin();
+      allow update: if false;
+    }
+  }
+}
