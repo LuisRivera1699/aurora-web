@@ -4,7 +4,7 @@ export const siteMeta = {
   name: "AURORA",
   tagline: "Software Factory",
   description:
-    "Soluciones tecnológicas confiables y a medida. Entregamos con excelencia, a tiempo y con foco en la innovación.",
+    "Soluciones tecnológicas y marketing digital confiables y a medida. Desarrollo, estrategia y presencia que impulsan tu negocio con entregas a tiempo.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
 };
 
@@ -20,7 +20,7 @@ export const navLinks = [
 export const hero = {
   headline: "Construimos software que impulsa tu negocio",
   subline:
-    "Desde la estrategia hasta producción: equipos senior, procesos claros y entregas que cumplen plazo.",
+    "Desde la estrategia y el marketing hasta producción: equipos senior, procesos claros y entregas que cumplen plazo.",
   ctaPrimary: "Solicitar propuesta",
   ctaSecondary: "Ver capacidades",
   /** Unsplash — team collaboration (dark, tech-adjacent) */
@@ -66,6 +66,11 @@ export const services = {
       title: "UX/UI Research",
       description:
         "Nuestra práctica de UX/UI Research se centra en el análisis profundo del comportamiento y las preferencias del usuario para informar el diseño de interfaces digitales altamente efectivas. Utilizando enfoques metodológicos sólidos, creamos experiencias de usuario diferenciadas que impulsan la satisfacción del cliente y el éxito comercial.",
+    },
+    {
+      title: "Marketing digital",
+      description:
+        "Orquestamos tu presencia y adquisición con estrategia, mensajes y campañas alineadas a objetivos medibles. Trabajamos posicionamiento, contenidos y activaciones en canales digitales con foco en conversión y retorno, coordinando creatividad y analítica para que cada inversión respalde tu propuesta de valor y tus entregables de producto.",
     },
   ],
 };
@@ -155,6 +160,7 @@ export const contact = {
     { value: "", label: "Tipo de necesidad (opcional)" },
     { value: "turnkey", label: "Proyecto llave en mano" },
     { value: "ux-ui", label: "UX/UI research y diseño" },
+    { value: "marketing", label: "Marketing digital" },
     { value: "web", label: "Web o e-commerce" },
     { value: "mobile", label: "App móvil" },
     { value: "blockchain", label: "Blockchain / Web3" },

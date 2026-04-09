@@ -15,7 +15,7 @@ export function ServicesSection() {
           <SectionTitle id={`${services.id}-heading`}>{services.title}</SectionTitle>
         </Reveal>
 
-        <ul className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-8">
+        <ul className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-8 xl:grid-cols-3 xl:gap-8">
           {services.items.map((item, i) => (
             <li key={item.title} className="flex min-w-0">
               <Reveal delay={0.05 * i} className="h-auto w-full lg:h-full">
