@@ -40,11 +40,18 @@ export const metadata: Metadata = {
     siteName: siteMeta.name,
     title: `${siteMeta.name} — ${siteMeta.tagline}`,
     description: siteMeta.description,
+    images: [
+      {
+        url: "/og-aurora.png",
+        alt: `${siteMeta.name} — ${siteMeta.tagline}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteMeta.name} — ${siteMeta.tagline}`,
     description: siteMeta.description,
+    images: ["/og-aurora.png"],
   },
   robots: { index: true, follow: true },
 };
