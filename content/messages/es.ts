@@ -36,6 +36,8 @@ export const messagesEs: SiteMessages = {
     languageSwitcherAria: "Selector de idioma",
     languageEs: "ES",
     languageEn: "EN",
+    menuOpenAria: "Abrir menú de navegación",
+    menuCloseAria: "Cerrar menú",
   },
   hero: {
     headline: "Sistemas empresariales impulsados por IA",

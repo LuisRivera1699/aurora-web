@@ -23,6 +23,8 @@ export type SiteMessages = {
     languageSwitcherAria: string;
     languageEs: string;
     languageEn: string;
+    menuOpenAria: string;
+    menuCloseAria: string;
   };
   hero: {
     headline: string;

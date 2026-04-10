@@ -36,6 +36,8 @@ export const messagesEn: SiteMessages = {
     languageSwitcherAria: "Language",
     languageEs: "ES",
     languageEn: "EN",
+    menuOpenAria: "Open navigation menu",
+    menuCloseAria: "Close menu",
   },
   hero: {
     headline: "Enterprise systems powered by AI",
