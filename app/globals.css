@@ -122,3 +122,29 @@ body {
     animation-play-state: paused;
   }
 }
+
+/* Cursor aurora: brillo pulsante (filter only; opacity la controla el rAF del componente) */
+@keyframes cursor-aurora-breathe {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+  38% {
+    filter: brightness(1.16) saturate(1.1);
+  }
+  68% {
+    filter: brightness(1.07) saturate(1.04);
+  }
+}
+
+.cursor-aurora-breathe {
+  animation: cursor-aurora-breathe 2.9s ease-in-out infinite;
+  will-change: filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-aurora-breathe {
+    animation: none;
+    filter: none;
+  }
+}

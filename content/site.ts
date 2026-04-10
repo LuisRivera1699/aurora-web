@@ -95,6 +95,11 @@ export const products = {
         "Potenciamos tu negocio en línea con soluciones de comercio electrónico personalizadas. Desde tiendas virtuales básicas hasta plataformas escalables, te ayudamos a alcanzar tus objetivos de ventas en línea.",
     },
     {
+      title: "Agentes de inteligencia artificial",
+      description:
+        "Creamos agentes de inteligencia artificial a medida para automatizar procesos clave y ganar velocidad operativa. Los conectamos a tus sistemas y herramientas (CRM, correo, APIs) con control y trazabilidad, desde el diseño hasta el despliegue en producción con el mismo rigor que el resto de nuestras soluciones.",
+    },
+    {
       title: "Desarrollo blockchain",
       description:
         "Explora el potencial de la tecnología blockchain con nuestras soluciones de desarrollo a medida. Desde contratos inteligentes hasta aplicaciones descentralizadas (dApps), te ayudamos a integrar la innovación blockchain en tu negocio.",
@@ -163,6 +168,7 @@ export const contact = {
     { value: "marketing", label: "Marketing digital" },
     { value: "web", label: "Web o e-commerce" },
     { value: "mobile", label: "App móvil" },
+    { value: "ai-agents", label: "Agentes de IA / automatización" },
     { value: "blockchain", label: "Blockchain / Web3" },
     { value: "other", label: "Otro" },
   ] as const,
