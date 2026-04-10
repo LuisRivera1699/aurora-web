@@ -2,8 +2,8 @@
 
 import { FirebaseError } from "firebase/app";
 import { useReducer } from "react";
-import { contact } from "@/content/site";
 import { Reveal } from "@/components/Reveal";
+import { useSiteMessages } from "@/components/SiteMessagesProvider";
 import { SectionTitle } from "@/components/SectionTitle";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { submitContactLead } from "@/lib/submit-contact-lead";
@@ -24,7 +24,7 @@ function formReducer(state: State, action: Action): State {
     case "start":
       return { status: "loading", message: "" };
     case "success":
-      return { status: "success", message: "Gracias. Te contactaremos pronto." };
+      return { status: "success", message: "" };
     case "error":
       return { status: "error", message: action.message };
     case "reset":
@@ -35,6 +35,7 @@ function formReducer(state: State, action: Action): State {
 }
 
 export function ContactForm() {
+  const { contact, contactForm } = useSiteMessages();
   const [state, dispatch] = useReducer(formReducer, {
     status: "idle",
     message: "",
@@ -56,7 +57,7 @@ export function ContactForm() {
     if (!isFirebaseConfigured()) {
       dispatch({
         type: "error",
-        message: "Formulario no disponible: configura Firebase en .env (NEXT_PUBLIC_FIREBASE_*).",
+        message: contactForm.errorFirebase,
       });
       return;
     }
@@ -76,14 +77,16 @@ export function ContactForm() {
       if (err instanceof FirebaseError && err.code === "permission-denied") {
         dispatch({
           type: "error",
-          message: "No autorizado. Revisa las reglas de Firestore para esta colección.",
+          message: contactForm.errorPermission,
         });
         return;
       }
-      const msg = err instanceof Error ? err.message : "No se pudo enviar. Intenta de nuevo.";
+      const msg = err instanceof Error ? err.message : contactForm.errorGeneric;
       dispatch({ type: "error", message: msg });
     }
   }
+
+  const req = contactForm.labels.required;
 
   return (
     <section
@@ -109,7 +112,7 @@ export function ContactForm() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-foreground">
-                    Nombre <span className="text-aurora-purple">*</span>
+                    {contactForm.labels.name} <span className="text-aurora-purple">{req}</span>
                   </label>
                   <input
                     id="name"
@@ -119,12 +122,12 @@ export function ContactForm() {
                     required
                     minLength={2}
                     className="w-full rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                    placeholder="Tu nombre"
+                    placeholder={contactForm.placeholders.name}
                   />
                 </div>
                 <div className="sm:col-span-2">
                   <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground">
-                    Correo <span className="text-aurora-purple">*</span>
+                    {contactForm.labels.email} <span className="text-aurora-purple">{req}</span>
                   </label>
                   <input
                     id="email"
@@ -133,12 +136,12 @@ export function ContactForm() {
                     autoComplete="email"
                     required
                     className="w-full rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                    placeholder="nombre@empresa.com"
+                    placeholder={contactForm.placeholders.email}
                   />
                 </div>
                 <div>
                   <label htmlFor="company" className="mb-1.5 block text-sm font-medium text-foreground">
-                    Empresa
+                    {contactForm.labels.company}
                   </label>
                   <input
                     id="company"
@@ -146,12 +149,12 @@ export function ContactForm() {
                     type="text"
                     autoComplete="organization"
                     className="w-full rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                    placeholder="Opcional"
+                    placeholder={contactForm.placeholders.company}
                   />
                 </div>
                 <div>
                   <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-foreground">
-                    Teléfono
+                    {contactForm.labels.phone}
                   </label>
                   <input
                     id="phone"
@@ -159,7 +162,7 @@ export function ContactForm() {
                     type="tel"
                     autoComplete="tel"
                     className="w-full rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                    placeholder="Opcional"
+                    placeholder={contactForm.placeholders.phone}
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -167,7 +170,7 @@ export function ContactForm() {
                     htmlFor="requirementType"
                     className="mb-1.5 block text-sm font-medium text-foreground"
                   >
-                    Tipo de necesidad
+                    {contactForm.labels.requirementType}
                   </label>
                   <select
                     id="requirementType"
@@ -184,7 +187,7 @@ export function ContactForm() {
                 </div>
                 <div className="sm:col-span-2">
                   <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-foreground">
-                    Requerimiento <span className="text-aurora-purple">*</span>
+                    {contactForm.labels.message} <span className="text-aurora-purple">{req}</span>
                   </label>
                   <textarea
                     id="message"
@@ -193,14 +196,14 @@ export function ContactForm() {
                     minLength={10}
                     rows={5}
                     className="w-full resize-y rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                    placeholder="Cuéntanos alcance, plazos y cualquier contexto útil."
+                    placeholder={contactForm.placeholders.message}
                   />
                 </div>
               </div>
 
               {state.status === "success" && (
                 <p className="rounded-xl bg-aurora-blue/15 px-4 py-3 text-sm text-foreground" role="status">
-                  {state.message}
+                  {contactForm.success}
                 </p>
               )}
               {state.status === "error" && (
@@ -214,7 +217,7 @@ export function ContactForm() {
                 disabled={state.status === "loading"}
                 className="w-full rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue py-4 text-base font-semibold text-white shadow-lg transition-[transform,opacity] enabled:hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:px-12"
               >
-                {state.status === "loading" ? "Enviando…" : "Enviar solicitud"}
+                {state.status === "loading" ? contactForm.sending : contactForm.submit}
               </button>
             </form>
           </Reveal>

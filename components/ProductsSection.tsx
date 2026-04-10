@@ -1,9 +1,10 @@
-import { products } from "@/content/site";
+import type { SiteMessages } from "@/content/messages/types";
 import { MotionCard } from "@/components/MotionCard";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 
-export function ProductsSection() {
+export function ProductsSection({ messages }: { messages: SiteMessages }) {
+  const { products } = messages;
   return (
     <section
       id={products.id}

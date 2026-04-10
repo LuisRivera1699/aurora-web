@@ -1,8 +1,9 @@
-import { about } from "@/content/site";
+import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 
-export function AboutSection() {
+export function AboutSection({ messages }: { messages: SiteMessages }) {
+  const { about } = messages;
   return (
     <section
       id={about.id}

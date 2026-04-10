@@ -1,5 +1,5 @@
 import { siFigma } from "simple-icons";
-import { portfolio } from "@/content/site";
+import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 
@@ -12,7 +12,8 @@ function FigmaMark({ className }: { className?: string }) {
   );
 }
 
-export function PortfolioSection() {
+export function PortfolioSection({ messages }: { messages: SiteMessages }) {
+  const { portfolio } = messages;
   return (
     <section
       id={portfolio.id}

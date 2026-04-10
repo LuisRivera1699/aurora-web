@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { navLinks, siteMeta } from "@/content/site";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import type { SiteMessages } from "@/content/messages/types";
 
-export function SiteHeader() {
+export function SiteHeader({ messages }: { messages: SiteMessages }) {
+  const { navLinks, siteMeta, siteHeader } = messages;
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-surface-900/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6 lg:px-8">
@@ -35,15 +37,22 @@ export function SiteHeader() {
             </a>
           ))}
         </nav>
-        <a
-          href="#contacto"
-          className="gradient-border-mask relative inline-flex max-w-[42%] shrink-0 items-center justify-center truncate rounded-full bg-surface-card px-3 py-2 text-xs font-semibold text-foreground transition-transform duration-300 hover:scale-[1.02] active:scale-[0.98] sm:max-w-none sm:px-5 sm:text-sm"
-        >
-          <span className="truncate sm:whitespace-normal">Solicitar propuesta</span>
-        </a>
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <LanguageSwitcher
+            ariaLabel={siteHeader.languageSwitcherAria}
+            labelEs={siteHeader.languageEs}
+            labelEn={siteHeader.languageEn}
+          />
+          <a
+            href={`#${messages.contact.id}`}
+            className="gradient-border-mask relative inline-flex max-w-[38%] shrink-0 items-center justify-center truncate rounded-full bg-surface-card px-3 py-2 text-xs font-semibold text-foreground transition-transform duration-300 hover:scale-[1.02] active:scale-[0.98] sm:max-w-none sm:px-5 sm:text-sm"
+          >
+            <span className="truncate sm:whitespace-normal">{siteHeader.ctaPrimary}</span>
+          </a>
+        </div>
       </div>
-      <nav
-        aria-label="Secciones (móvil)"
+        <nav
+          aria-label={siteHeader.navMobileAria}
         className="flex gap-1 overflow-x-auto overscroll-x-contain border-t border-white/5 px-3 py-1 md:hidden [-webkit-overflow-scrolling:touch]"
       >
         {navLinks.map((item) => (

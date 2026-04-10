@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { hero } from "@/content/site";
+import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 
-export function Hero() {
+export function Hero({ messages }: { messages: SiteMessages }) {
+  const { hero, contact, services } = messages;
   return (
     <section
       id="inicio"
@@ -61,13 +62,13 @@ export function Hero() {
           <Reveal delay={0.18}>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
-                href="#contacto"
+                href={`#${contact.id}`}
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-aurora-blue/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/25"
               >
                 {hero.ctaPrimary}
               </Link>
               <a
-                href="#servicios"
+                href={`#${services.id}`}
                 className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-white/35 hover:bg-white/10"
               >
                 {hero.ctaSecondary}
@@ -76,7 +77,7 @@ export function Hero() {
           </Reveal>
           <Reveal delay={0.22}>
             <p className="text-xs text-foreground-muted/80">
-              Foto:{" "}
+              {hero.photoPrefix}{" "}
               <a
                 href={hero.backgroundImage.creditUrl}
                 className="underline decoration-white/30 underline-offset-2 hover:decoration-white/60"

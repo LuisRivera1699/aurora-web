@@ -1,9 +1,10 @@
-import { techStack } from "@/content/site";
+import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 import { TechStackMarquee } from "@/components/TechStackMarquee";
 
-export function TechStackGrid() {
+export function TechStackGrid({ messages }: { messages: SiteMessages }) {
+  const { techStack } = messages;
   return (
     <section
       id={techStack.id}

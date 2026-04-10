@@ -8,23 +8,33 @@ import { ProductsSection } from "@/components/ProductsSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TechStackGrid } from "@/components/TechStackGrid";
+import { getMessages, isLocale } from "@/content/getMessages";
+import { notFound } from "next/navigation";
 
-export default function Home() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const messages = getMessages(locale);
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader messages={messages} />
       <main className="flex-1">
-        <Hero />
+        <Hero messages={messages} />
         <PatternStrip variant={1} />
-        <AboutSection />
+        <AboutSection messages={messages} />
         <PatternStrip variant={2} />
-        <ServicesSection />
-        <ProductsSection />
-        <TechStackGrid />
-        <PortfolioSection />
+        <ServicesSection messages={messages} />
+        <ProductsSection messages={messages} />
+        <TechStackGrid messages={messages} />
+        <PortfolioSection messages={messages} />
         <ContactForm />
       </main>
-      <Footer />
+      <Footer messages={messages} />
     </>
   );
 }
