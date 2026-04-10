@@ -1,10 +1,10 @@
-/** Site copy and structured content — AURORA Software Factory (ES). */
+/** Site copy and structured content — AURORA AI Driven Software Factory (ES). */
 
 export const siteMeta = {
   name: "AURORA",
-  tagline: "Software Factory",
+  tagline: "AI Driven Software Factory",
   description:
-    "Soluciones tecnológicas y marketing digital confiables y a medida. Desarrollo, estrategia y presencia que impulsan tu negocio con entregas a tiempo.",
+    "Software factory donde la IA acelera el diseño y el desarrollo de sistemas empresariales a medida. Desarrollo, agentes inteligentes y marketing digital, con calidad, criterio y entregas a tiempo.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
 };
 
@@ -18,9 +18,9 @@ export const navLinks = [
 ] as const;
 
 export const hero = {
-  headline: "Construimos software que impulsa tu negocio",
+  headline: "Sistemas empresariales impulsados por IA",
   subline:
-    "Desde la estrategia y el marketing hasta producción: equipos senior, procesos claros y entregas que cumplen plazo.",
+    "Somos una AI-driven Software Factory: combinamos ingeniería senior e inteligencia artificial para ir de la estrategia al software en producción—con procesos claros, plazos cumplidos y resultados que puedes medir.",
   ctaPrimary: "Solicitar propuesta",
   ctaSecondary: "Ver capacidades",
   /** Unsplash — team collaboration (dark, tech-adjacent) */
@@ -28,7 +28,8 @@ export const hero = {
     src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80",
     alt: "Equipo colaborando en un proyecto tecnológico",
     credit: "Unsplash / Annie Spratt",
-    creditUrl: "https://unsplash.com/photos/photo-of-people-sitting-in-front-of-computer-72NjxYfqNr4",
+    creditUrl:
+      "https://unsplash.com/photos/photo-of-people-sitting-in-front-of-computer-72NjxYfqNr4",
   },
 };
 
@@ -36,9 +37,9 @@ export const about = {
   id: "nosotros",
   title: "Nosotros",
   mission:
-    "Somos una software factory dedicada a ofrecer soluciones tecnológicas confiables y a medida para empresas de todo el mundo. Nos destacamos por nuestro compromiso inquebrantable con el cumplimiento de plazos, entregando proyectos de alta calidad de manera oportuna. En un mercado en constante cambio y evolución, nos esforzamos por ser el socio tecnológico preferido de nuestros clientes, brindando innovación y confiabilidad en cada solución que entregamos.",
+    "Somos una AI-driven Software Factory: diseñamos y construimos soluciones empresariales a medida, con la IA integrada en cada fase—desde el discovery hasta el despliegue—y siempre con supervisión humana, trazabilidad y altos estándares de calidad. Priorizamos plazos cumplidos y la confianza en cada entrega. Nuestro objetivo: ser el socio tecnológico que convierte innovación en resultados medibles para tu negocio.",
   vision:
-    "Nos impulsa una visión clara: ser líderes en el mercado global de servicios tecnológicos, reconocidos por nuestra excelencia en el cumplimiento de plazos y nuestra capacidad para ofrecer soluciones innovadoras que superen las expectativas de nuestros clientes. Con una cultura arraigada en la excelencia, la colaboración y la innovación, nos comprometemos a impulsar el éxito y el crecimiento empresarial en todo el mundo, un proyecto a la vez.",
+    "Creemos en sistemas que escalan y en poner la innovación al servicio del negocio: ingeniería sólida e IA aplicada con criterio, excelencia operativa y compromiso con los plazos. Trabajamos con cultura de colaboración y mejora continua para impulsar el crecimiento de nuestros clientes, un proyecto a la vez.",
   stats: [
     {
       prefix: ">",
@@ -149,7 +150,7 @@ export const portfolio = {
   id: "portafolio",
   title: "Portafolio",
   description:
-    "Proyectos, identidad y entregables en un prototipo navegable: la misma visión que compartimos con clientes, lista para explorarse con calma.",
+    "Proyectos, identidad y entregables en un prototipo navegable: nuestra forma de pensar la software factory aplicada a sistemas empresariales, para explorarla con calma.",
   hint: "El enlace abre Figma en una nueva pestaña.",
   cardLine: "Presentación interactiva con casos y muestras de trabajo.",
   ctaLabel: "Abrir portafolio en Figma",
@@ -160,7 +161,7 @@ export const contact = {
   id: "contacto",
   title: "Hablemos de tu requerimiento",
   description:
-    "Cuéntanos qué necesitas: te responderemos con próximos pasos y una propuesta acorde a tu contexto.",
+    "Cuéntanos qué necesitas: te respondemos con próximos pasos y una propuesta clara—alcance, plazos y valor—con el rigor de entrega que aplicamos en cada proyecto.",
   requirementTypes: [
     { value: "", label: "Tipo de necesidad (opcional)" },
     { value: "turnkey", label: "Proyecto llave en mano" },
