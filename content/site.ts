@@ -17,6 +17,18 @@ export const navLinks = [
   { href: "#contacto", label: "Contacto" },
 ] as const;
 
+export const socialLinks = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/teamaurora.pe/",
+    handle: "@teamaurora.pe",
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/aurora-software-factory",
+  },
+] as const;
+
 export const hero = {
   headline: "Sistemas empresariales impulsados por IA",
   subline:
