@@ -8,6 +8,7 @@ import { ProductsSection } from "@/components/ProductsSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TechStackGrid } from "@/components/TechStackGrid";
+import { BlogTeaserSection } from "@/components/blog/BlogTeaserSection";
 import { getMessages, isLocale } from "@/content/getMessages";
 import { notFound } from "next/navigation";
 
@@ -32,6 +33,7 @@ export default async function HomePage({
         <ProductsSection messages={messages} />
         <TechStackGrid messages={messages} />
         <PortfolioSection messages={messages} />
+        <BlogTeaserSection locale={locale} messages={messages} />
         <ContactForm />
       </main>
       <Footer messages={messages} />

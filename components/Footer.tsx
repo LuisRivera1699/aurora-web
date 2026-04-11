@@ -12,15 +12,21 @@ function fillFooterTemplate(template: string, vars: Record<string, string>) {
   return template.replace(/\{(\w+)\}/g, (_, key: string) => vars[key] ?? "");
 }
 
+function resolveNavHref(href: string, locale: string) {
+  if (href.startsWith("#")) return `/${locale}${href}`;
+  return href;
+}
+
 export function Footer({ messages }: { messages: SiteMessages }) {
   const { navLinks, siteMeta, socialLinks, footer, siteHeader } = messages;
+  const localePrefix = `/${messages.locale}`;
   const year = new Date().getFullYear();
   return (
     <footer className="border-t border-white/10 bg-surface-900 py-14">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:flex-row lg:justify-between lg:px-8">
         <div className="space-y-4">
           <Link
-            href="#inicio"
+            href={`${localePrefix}#inicio`}
             className="relative block h-14 w-14 shrink-0 sm:h-16 sm:w-16"
             aria-label={fillFooterTemplate(footer.homeLinkAria, {
               name: siteMeta.name,
@@ -76,7 +82,7 @@ export function Footer({ messages }: { messages: SiteMessages }) {
           {navLinks.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={resolveNavHref(item.href, messages.locale)}
               className="text-sm text-foreground-muted hover:text-foreground"
             >
               {item.label}

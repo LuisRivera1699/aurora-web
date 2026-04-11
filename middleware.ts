@@ -25,6 +25,23 @@ export function middleware(request: NextRequest) {
     return res;
   }
 
+  if (pathname === "/blog") {
+    const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
+    const locale =
+      cookieLocale === "en" || cookieLocale === "es"
+        ? cookieLocale
+        : localeFromAcceptLanguage(request.headers.get("accept-language"));
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/blog`;
+    const res = NextResponse.redirect(url);
+    res.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+    return res;
+  }
+
   const first = pathname.split("/").filter(Boolean)[0];
   if (first === "es" || first === "en") {
     const requestHeaders = new Headers(request.headers);
@@ -44,5 +61,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/(es|en)/:path*"],
+  matcher: ["/", "/blog", "/(es|en)/:path*"],
 };

@@ -4,6 +4,7 @@ const FIGMA_PORTFOLIO_DEFAULT =
   "https://www.figma.com/proto/rdjsRp3VmNbtR7e8o9Zd3X/Aurora?node-id=3698-404&t=twfA6KgC672rMKON-1&scaling=contain&content-scaling=fixed&page-id=338%3A2&starting-point-node-id=3698%3A404&show-proto-sidebar=1";
 
 export const messagesEn: SiteMessages = {
+  locale: "en",
   siteMeta: {
     name: "AURORA",
     tagline: "AI Driven Software Factory",
@@ -17,6 +18,7 @@ export const messagesEn: SiteMessages = {
     { href: "#products", label: "Products" },
     { href: "#stack", label: "Stack" },
     { href: "#portfolio", label: "Portfolio" },
+    { href: "/en/blog", label: "Blog" },
     { href: "#contact", label: "Contact" },
   ],
   socialLinks: [
@@ -210,5 +212,23 @@ export const messagesEn: SiteMessages = {
     homeLinkAria: "{name} — {tagline}, go to home",
     socialAriaInstagram: "Instagram ({handle})",
     socialAriaLinkedIn: "LinkedIn — {brand}",
+  },
+  blog: {
+    navLabel: "Blog",
+    sectionTitle: "From the blog",
+    sectionSubtitle: "Notes on engineering, AI, and enterprise systems.",
+    viewAll: "View all articles",
+    pageTitle: "Blog",
+    pageDescription:
+      "Articles on software development, applied AI, and engineering practices from Aurora.",
+    readingTime: "Read time",
+    readingTimeMinutes: "{minutes} min",
+    authorByline: "Editorial: Aurora AI",
+    publishedLabel: "Published",
+    imageCreditPrefix: "Photo:",
+    auroraTakeHeading: "The Aurora take",
+    referencesHeading: "References",
+    emptyList: "No articles published yet.",
+    readArticle: "Read article",
   },
 };

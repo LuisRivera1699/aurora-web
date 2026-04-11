@@ -84,10 +84,17 @@ type MobileDrawerProps = {
   onClose: () => void;
   messages: SiteMessages;
   panelTitleId: string;
+  localePrefix: string;
 };
 
-function MobileDrawer({ menuOpen, onClose, messages, panelTitleId }: MobileDrawerProps) {
+function resolveNavHref(href: string, localePrefix: string) {
+  if (href.startsWith("#")) return `${localePrefix}${href}`;
+  return href;
+}
+
+function MobileDrawer({ menuOpen, onClose, messages, panelTitleId, localePrefix }: MobileDrawerProps) {
   const { navLinks, siteMeta, siteHeader } = messages;
+  const homeHref = `${localePrefix}#inicio`;
   const reduceMotion = useReducedMotion();
 
   const backdropTransition = reduceMotion ? { duration: 0.15 } : { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
@@ -138,7 +145,7 @@ function MobileDrawer({ menuOpen, onClose, messages, panelTitleId }: MobileDrawe
             <div className="relative border-b border-white/10 bg-gradient-to-b from-white/[0.09] to-transparent px-4 pb-4 pt-5">
               <div className="flex items-start justify-between gap-3">
                 <Link
-                  href="#inicio"
+                  href={homeHref}
                   id={panelTitleId}
                   className="relative block w-[min(100%,11rem)] shrink-0 pt-0.5 opacity-95 transition-opacity hover:opacity-100 focus-visible:opacity-100"
                   onClick={onClose}
@@ -178,7 +185,7 @@ function MobileDrawer({ menuOpen, onClose, messages, panelTitleId }: MobileDrawe
               {navLinks.map((item) => (
                 <motion.a
                   key={item.href}
-                  href={item.href}
+                  href={resolveNavHref(item.href, localePrefix)}
                   variants={itemVariantsResolved}
                   className="group relative flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-3.5 text-[15px] font-medium tracking-wide text-foreground-muted transition-[color,background-color,border-color,transform] hover:border-white/10 hover:bg-white/[0.06] hover:text-foreground active:scale-[0.985]"
                   onClick={onClose}
@@ -229,14 +236,16 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen, closeMenu]);
 
-  const ctaHref = `#${messages.contact.id}`;
+  const localePrefix = `/${messages.locale}`;
+  const homeHref = `${localePrefix}#inicio`;
+  const ctaHref = `${localePrefix}#${messages.contact.id}`;
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-surface-900/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-3 py-2 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-3 md:py-0 lg:px-8">
         <div className="flex h-12 min-h-12 w-full items-center justify-between gap-2 sm:h-14 sm:gap-3 md:h-16 md:min-h-0 md:flex-1">
           <Link
-            href="#inicio"
+            href={homeHref}
             className="relative block h-9 w-9 shrink-0 opacity-90 transition-opacity hover:opacity-100 focus-visible:opacity-100 sm:h-10 sm:w-10"
             aria-label={`${siteMeta.name} — ${siteMeta.tagline}, ir al inicio`}
             onClick={closeMenu}
@@ -259,7 +268,7 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
             {messages.navLinks.map((item) => (
               <a
                 key={item.href}
-                href={item.href}
+                href={resolveNavHref(item.href, localePrefix)}
                 className="shrink-0 rounded-lg px-2.5 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground lg:px-3"
               >
                 {item.label}
@@ -308,6 +317,7 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
               onClose={closeMenu}
               messages={messages}
               panelTitleId={panelTitleId}
+              localePrefix={localePrefix}
             />,
             document.body,
           )
