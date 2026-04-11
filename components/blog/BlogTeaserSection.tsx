@@ -2,6 +2,7 @@ import type { SiteMessages } from "@/content/messages/types";
 import { latestArticles } from "@/lib/articles/server";
 import Link from "next/link";
 import { BlogCard } from "@/components/blog/BlogCard";
+import { SectionTitle } from "@/components/SectionTitle";
 
 type BlogTeaserSectionProps = {
   locale: "es" | "en";
@@ -18,22 +19,16 @@ export async function BlogTeaserSection({ locale, messages }: BlogTeaserSectionP
       aria-labelledby="blog-teaser-heading"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-aurora-purple/90">
-              {messages.blog.navLabel}
+        <div className="mb-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-6">
+            <SectionTitle id="blog-teaser-heading">{messages.blog.sectionTitle}</SectionTitle>
+            <p className="max-w-xl text-base leading-relaxed text-foreground-muted md:text-lg">
+              {messages.blog.sectionSubtitle}
             </p>
-            <h2
-              id="blog-teaser-heading"
-              className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-            >
-              {messages.blog.sectionTitle}
-            </h2>
-            <p className="max-w-xl text-foreground-muted">{messages.blog.sectionSubtitle}</p>
           </div>
           <Link
             href={`/${locale}/blog`}
-            className="gradient-border-mask inline-flex shrink-0 items-center justify-center rounded-full bg-surface-card px-5 py-2.5 text-sm font-semibold text-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="gradient-border-mask inline-flex shrink-0 items-center justify-center self-start rounded-full bg-surface-card px-5 py-2.5 text-sm font-semibold text-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] sm:self-auto"
           >
             {messages.blog.viewAll}
           </Link>

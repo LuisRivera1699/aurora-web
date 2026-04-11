@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { Footer } from "@/components/Footer";
+import { SectionTitle } from "@/components/SectionTitle";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { getMessages, isLocale } from "@/content/getMessages";
 import { listArticles } from "@/lib/articles/server";
@@ -53,14 +54,13 @@ export default async function BlogIndexPage({
       <SiteHeader messages={messages} />
       <main className="flex-1">
         <div className="border-b border-white/10 bg-gradient-to-b from-surface-850/50 to-transparent">
-          <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-aurora-purple/90">
-              {messages.blog.navLabel}
-            </p>
-            <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          <div className="mx-auto max-w-6xl space-y-6 px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+            <SectionTitle as="h1" id="blog-heading">
               {messages.blog.pageTitle}
-            </h1>
-            <p className="mt-4 max-w-2xl text-lg text-foreground-muted">{messages.blog.pageDescription}</p>
+            </SectionTitle>
+            <p className="max-w-2xl text-base leading-relaxed text-foreground-muted md:text-lg">
+              {messages.blog.pageDescription}
+            </p>
           </div>
         </div>
 

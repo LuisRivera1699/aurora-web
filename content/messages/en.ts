@@ -215,10 +215,10 @@ export const messagesEn: SiteMessages = {
   },
   blog: {
     navLabel: "Blog",
-    sectionTitle: "From the blog",
+    sectionTitle: "Aurora Blog",
     sectionSubtitle: "Notes on engineering, AI, and enterprise systems.",
     viewAll: "View all articles",
-    pageTitle: "Blog",
+    pageTitle: "Aurora Blog",
     pageDescription:
       "Articles on software development, applied AI, and engineering practices from Aurora.",
     readingTime: "Read time",

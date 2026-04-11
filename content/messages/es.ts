@@ -215,10 +215,10 @@ export const messagesEs: SiteMessages = {
   },
   blog: {
     navLabel: "Blog",
-    sectionTitle: "Del blog",
+    sectionTitle: "Aurora Blog",
     sectionSubtitle: "Ideas sobre ingeniería, IA y sistemas empresariales.",
     viewAll: "Ver más artículos",
-    pageTitle: "Blog",
+    pageTitle: "Aurora Blog",
     pageDescription:
       "Artículos sobre desarrollo de software, IA aplicada y buenas prácticas de Aurora.",
     readingTime: "Lectura",
