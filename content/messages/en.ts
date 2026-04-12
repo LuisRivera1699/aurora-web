@@ -1,7 +1,7 @@
 import type { SiteMessages } from "@/content/messages/types";
 
 const FIGMA_PORTFOLIO_DEFAULT =
-  "https://www.figma.com/proto/rdjsRp3VmNbtR7e8o9Zd3X/Aurora?node-id=3698-404&t=twfA6KgC672rMKON-1&scaling=contain&content-scaling=fixed&page-id=338%3A2&starting-point-node-id=3698%3A404&show-proto-sidebar=1";
+  "https://www.figma.com/proto/rdjsRp3VmNbtR7e8o9Zd3X/Aurora?node-id=3837-2034&t=jbrdw7O7L9VTdyPh-1&scaling=contain&content-scaling=fixed&page-id=338%3A2&starting-point-node-id=3837%3A2034&show-proto-sidebar=1";
 
 export const messagesEn: SiteMessages = {
   locale: "en",
@@ -65,7 +65,11 @@ export const messagesEn: SiteMessages = {
       "We believe in systems that scale and in putting innovation at the service of the business: solid engineering and AI applied with judgment, operational excellence, and commitment to deadlines. We work with a culture of collaboration and continuous improvement to grow our clients’ businesses—one project at a time.",
     stats: [
       { prefix: ">", value: "+10", label: "projects shipped to production" },
-      { prefix: ">", value: "08", label: "weeks on average to launch a project" },
+      {
+        prefix: ">",
+        value: "08",
+        label: "weeks on average to launch a project",
+      },
     ],
   },
   services: {
