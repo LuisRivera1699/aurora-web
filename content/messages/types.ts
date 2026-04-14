@@ -130,4 +130,124 @@ export type SiteMessages = {
     emptyList: string;
     readArticle: string;
   };
+  diagnosticPromo: {
+    title: string;
+    description: string;
+    cta: string;
+  };
+  /** Post-booking Calendly redirect; locale resolved via middleware from `/diagnostic/thanks`. */
+  diagnosticThanks: {
+    pageTitle: string;
+    headline: string;
+    bodyMeeting: string;
+    bodyEmail: string;
+    /** Shown before the formatted date/time when Calendly passes `event_start_time`. */
+    meetingIntro: string;
+    homeCta: string;
+  };
+  diagnostic: {
+    navLabel: string;
+    pageTitle: string;
+    pageSubtitle: string;
+    progress: string;
+    back: string;
+    next: string;
+    submit: string;
+    submitting: string;
+    errorGeneric: string;
+    errorNotConfigured: string;
+    stepProfileTitle: string;
+    stepProfileSubtitle: string;
+    optionCompany: string;
+    optionStartup: string;
+    optionFreelancer: string;
+    stepCompanyGoalTitle: string;
+    optionAutomation: string;
+    optionNewProduct: string;
+    optionUnsure: string;
+    optionUrgent: string;
+    optionSoon: string;
+    optionExploring: string;
+    /** Texto pequeño bajo cada pregunta abierta del flujo (animación a dar más detalle). */
+    flowStepDetailHint: string;
+    stepContactTitle: string;
+    labels: {
+      name: string;
+      email: string;
+      company: string;
+      phone: string;
+      webUrlCompany: string;
+      webUrlFreelancer: string;
+    };
+    placeholders: {
+      name: string;
+      email: string;
+      company: string;
+      phone: string;
+      webUrlCompany: string;
+      webUrlFreelancer: string;
+    };
+    /** Texto opcional bajo el campo URL en contacto. */
+    webUrlOptionalHint: string;
+    flows: {
+      companyAutomation: { title: string; description: string; placeholder: string }[];
+      companyNewProduct: { title: string; description: string; placeholder: string }[];
+      companyUnsure: { title: string; description: string; placeholder: string }[];
+      startup: { title: string; description: string; placeholder: string }[];
+      freelancer: { title: string; description: string; placeholder: string }[];
+    };
+  };
+  report: {
+    pageTitle: string;
+    /** Prefijo antes del nombre (empresa/freelancer); el nombre viene del payload. */
+    clientLinePrefix: string;
+    loading: string;
+    notFound: string;
+    errorState: string;
+    downloadPdf: string;
+    scheduleCta: string;
+    scheduleButton: string;
+    scheduleCta15m: string;
+    /** Label for the clickable CTA button in the downloadable PDF. */
+    pdfCtaLinkLabel: string;
+    opportunityBadge: string;
+    insightsTitle: string;
+    impactTitle: string;
+    impactTime: string;
+    impactOps: string;
+    impactBusiness: string;
+    /** Subtítulo bajo las tarjetas de impacto para el párrafo cualitativo (`estimated_impact`). */
+    impactNarrativeSubtitle: string;
+    /** Botón CTA compacto (p. ej. tras el hero). */
+    scheduleButtonCompact: string;
+    /** Título de la tarjeta sticky en desktop. */
+    reportAsideCtaTitle: string;
+    /** Accesibilidad: botón flecha “hay más contenido abajo”. */
+    reportScrollHintAria: string;
+    primaryRecLabel: string;
+    primaryRec: {
+      automate: string;
+      validate_first: string;
+      build_mvp: string;
+      do_not_invest_yet: string;
+    };
+    scheduleUrl?: string;
+    sections: {
+      summary: string;
+      problem: string;
+      opportunity: string;
+      risks: string;
+      recommendation: string;
+      impact: string;
+      nextSteps: string;
+    };
+  };
+  adminDiagnostics: {
+    title: string;
+    navBack: string;
+    empty: string;
+    cols: { name: string; company: string; type: string; opportunity: string; date: string };
+    viewReport: string;
+    detailTitle: string;
+  };
 };

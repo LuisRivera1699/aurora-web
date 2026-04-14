@@ -10,7 +10,7 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth != null
         && request.auth.token.email is string
-        && request.auth.token.email == "admin@example.com";
+        && request.auth.token.email == "luisriveradiaz1699@gmail.com";
     }
 
     // Colección: misma base que NEXT_PUBLIC_FIRESTORE_CONTACT_COLLECTION (default contact_requests).
@@ -51,6 +51,12 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow delete: if isAdmin();
       allow update: if false;
+    }
+
+    // Diagnósticos IA: solo lectura admin; escritura vía Cloud Functions (Admin SDK).
+    match /diagnostics/{docId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
     }
   }
 }

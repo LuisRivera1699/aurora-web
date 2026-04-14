@@ -19,6 +19,7 @@ export const messagesEn: SiteMessages = {
     { href: "#stack", label: "Stack" },
     { href: "#portfolio", label: "Portfolio" },
     { href: "/en/blog", label: "Blog" },
+    { href: "/en/diagnostic", label: "AI diagnostic" },
     { href: "#contact", label: "Contact" },
   ],
   socialLinks: [
@@ -234,5 +235,324 @@ export const messagesEn: SiteMessages = {
     referencesHeading: "References",
     emptyList: "No articles published yet.",
     readArticle: "Read article",
+  },
+  diagnosticPromo: {
+    title: "Get a free AI diagnosis",
+    description:
+      "Answer a few quick questions and receive an orientative brief with opportunities and next steps.",
+    cta: "Start diagnosis",
+  },
+  diagnosticThanks: {
+    pageTitle: "Thanks for booking",
+    headline: "Thank you for scheduling with us.",
+    bodyMeeting:
+      "We’ll see you at the meeting. If you haven’t already, you can add it to your calendar from your confirmation email.",
+    bodyEmail:
+      "Remember: we sent your diagnostic report to the email address you shared with us.",
+    meetingIntro: "Your session:",
+    homeCta: "Back to home",
+  },
+  diagnostic: {
+    navLabel: "AI diagnostic",
+    pageTitle: "AI-powered diagnostic",
+    pageSubtitle:
+      "Tell us about your context in a few minutes. We analyze what you share with assisted intelligence and professional judgment, and you get an orientative diagnostic—clear, structured, and with concrete next steps.",
+    progress: "Step {current} of {total}",
+    back: "Back",
+    next: "Next",
+    submit: "Generate report",
+    submitting: "Generating your report…",
+    errorGeneric: "We couldn’t complete the diagnostic. Please try again.",
+    errorNotConfigured: "This service isn’t configured yet. Check back soon.",
+    stepProfileTitle: "What best describes your situation?",
+    stepProfileSubtitle: "Pick the closest option.",
+    optionCompany: "I run an operating company",
+    optionStartup: "I have a startup idea",
+    optionFreelancer: "I’m independent / freelancer",
+    stepCompanyGoalTitle: "What are you trying to do?",
+    optionAutomation: "Automate or improve processes",
+    optionNewProduct: "Build a new digital product",
+    optionUnsure: "I’m not sure yet",
+    optionUrgent: "Very urgent (weeks)",
+    optionSoon: "Soon (1–3 months)",
+    optionExploring: "Exploring options",
+    flowStepDetailHint:
+      "A short answer is fine—the more context you share, the better we can tailor the automated diagnostic to your project.",
+    stepContactTitle: "Where should we send the report?",
+    labels: {
+      name: "Name",
+      email: "Email",
+      company: "Company",
+      phone: "Phone",
+      webUrlCompany: "Website or main page",
+      webUrlFreelancer: "Website or professional profile",
+    },
+    placeholders: {
+      name: "Your name",
+      email: "you@email.com",
+      company: "Optional",
+      phone: "Optional",
+      webUrlCompany: "https://yourcompany.com",
+      webUrlFreelancer: "Website, LinkedIn, Instagram…",
+    },
+    webUrlOptionalHint:
+      "Optional. Helps us prepare before a call; it is not used in the automated diagnostic.",
+    flows: {
+      companyAutomation: [
+        {
+          title: "Which area or process do you want to improve?",
+          description:
+            "The department or flow name is enough (sales, billing, support…). It doesn’t need to be exhaustive.",
+          placeholder: "e.g. WhatsApp support, invoicing, customer onboarding…",
+        },
+        {
+          title: "How do you do it today?",
+          description:
+            "Describe the real process, even if messy: steps, tools, and who does what.",
+          placeholder: "e.g. shared Excel, paper, multiple tools without integration…",
+        },
+        {
+          title: "What is the main problem?",
+          description:
+            "You don’t need a technical fix yet: what breaks, slows down, or costs the most.",
+          placeholder: "Describe the bottleneck or recurring failure.",
+        },
+        {
+          title: "How many people are involved?",
+          description:
+            "A rough number is fine. If it helps, add roles (sales, finance, IT…).",
+          placeholder: "Approximate headcount or teams.",
+        },
+        {
+          title: "How much time does it take (per week or per case)?",
+          description:
+            "A ballpark is enough: hours per week or minutes per ticket/case.",
+          placeholder: "e.g. 10h/week, 30 min per ticket…",
+        },
+        {
+          title: "Urgency level",
+          description:
+            "Helps us prioritize the diagnostic given real deadlines and pressure.",
+          placeholder: "Choose an option below.",
+        },
+        {
+          title: "What have you already tried?",
+          description:
+            "Include what didn’t work or stalled — that context still matters.",
+          placeholder: "Tools, vendors, internal attempts…",
+        },
+      ],
+      companyNewProduct: [
+        {
+          title: "What kind of digital product do you have in mind?",
+          description:
+            "No perfect label needed: what it is, for whom, and how they’d use it.",
+          placeholder: "e.g. B2B app, marketplace, internal SaaS…",
+        },
+        {
+          title: "What concrete problem would it solve?",
+          description:
+            "Think about the end user: what happens today if this didn’t exist.",
+          placeholder: "For whom and in what moment of their workflow.",
+        },
+        {
+          title: "Who is the target audience?",
+          description:
+            "One segment or several; size and role already tell us a lot.",
+          placeholder: "Segment, size, geography, user role.",
+        },
+        {
+          title: "What validation exists today?",
+          description:
+            "Real signals, even small: interviews, sales, waitlist, or “nothing yet”.",
+          placeholder: "Interviews, pilots, waitlist, sales, none yet…",
+        },
+        {
+          title: "How do you see competition or substitutes?",
+          description:
+            "Include how people solve it without you (apps, spreadsheets, agencies…).",
+          placeholder: "What customers use today instead of you.",
+        },
+        {
+          title: "What stage is the project at?",
+          description:
+            "There’s no wrong answer — we just want to align expectations and next steps.",
+          placeholder: "Idea, design, MVP, beta, production…",
+        },
+        {
+          title: "What do you need right now?",
+          description:
+            "One clear priority (discovery, design, build…) helps us be concrete.",
+          placeholder: "Discovery, design, build, launch, scale…",
+        },
+      ],
+      companyUnsure: [
+        {
+          title: "Summarize the problem or opportunity in your words",
+          description:
+            "Free text when you’re not sure yet if it’s “automation” or a “new product”.",
+          placeholder: "Context and main pain — it doesn’t need to be perfect.",
+        },
+        {
+          title: "Additional context",
+          description:
+            "Industry, team size, regulation, or time/budget limits, if relevant.",
+          placeholder: "Industry, team size, constraints (time, budget, compliance)…",
+        },
+        {
+          title: "How urgent does it feel?",
+          description:
+            "Your subjective sense of pressure or dates that matter is enough.",
+          placeholder: "Internal deadlines or events driving timing.",
+        },
+        {
+          title: "What tools or support do you have today?",
+          description:
+            "Software, vendor, or internal team; “poorly integrated” counts too.",
+          placeholder: "Software, vendor, internal team…",
+        },
+        {
+          title: "What outcome would you like in 3–6 months?",
+          description:
+            "Can be tangible (saved time) or strategic (clarity, alignment).",
+          placeholder: "Even directional is fine.",
+        },
+      ],
+      startup: [
+        {
+          title: "Your idea in one line",
+          description:
+            "One pitch-style sentence: what you offer, for whom, and what changes for them.",
+          placeholder: "What you offer and for whom.",
+        },
+        {
+          title: "What validation do you have so far?",
+          description:
+            "Metrics, pilots, LOIs, or “just conversations so far” — all useful.",
+          placeholder: "Metrics, pilots, LOIs, pre-sales…",
+        },
+        {
+          title: "Users or customers today?",
+          description:
+            "Rough numbers and main channel. If there’s no traction yet, say so.",
+          placeholder: "Approximate numbers and main channel.",
+        },
+        {
+          title: "What problem do you solve for them?",
+          description:
+            "Concrete pain and what they do today without you (including “nothing”).",
+          placeholder: "Concrete pain and current alternative.",
+        },
+        {
+          title: "Competition or substitutes",
+          description:
+            "How the need is covered today: other startups, generic tools, or manual work.",
+          placeholder: "How they solve it without you today.",
+        },
+        {
+          title: "Project stage",
+          description:
+            "To orient the diagnostic: idea, MVP, traction, scale — whatever fits best.",
+          placeholder: "Idea, MVP, traction, growth…",
+        },
+        {
+          title: "What do you need now?",
+          description:
+            "One priority for the next few weeks (validate, build, sell, pivot…).",
+          placeholder: "Single priority for the next few weeks.",
+        },
+      ],
+      freelancer: [
+        {
+          title: "What do you do?",
+          description:
+            "Your main service and typical clients; one example is enough.",
+          placeholder: "Main service and typical clients.",
+        },
+        {
+          title: "What task is most repetitive?",
+          description:
+            "What eats the most time in practice, even if it’s not the “glamorous” work.",
+          placeholder: "What eats the most time each week.",
+        },
+        {
+          title: "What tools do you use today?",
+          description:
+            "Include what works and what slows you down or creates duplicate work.",
+          placeholder: "Include the ones that frustrate you.",
+        },
+        {
+          title: "What would you like to automate or delegate with tech?",
+          description:
+            "You don’t need to know how — just what you’d like off your plate manually.",
+          placeholder: "Even if you don’t know how yet.",
+        },
+        {
+          title: "How much time do you spend on that?",
+          description:
+            "Hours per week or % of billable time; an estimate is fine.",
+          placeholder: "Hours/week or % of billable time.",
+        },
+        {
+          title: "What is your main goal?",
+          description:
+            "What you want to improve in the next few months (revenue, time, stress…).",
+          placeholder: "More clients, margin, time, delivery quality…",
+        },
+      ],
+    },
+  },
+  report: {
+    pageTitle: "Your report",
+    clientLinePrefix: "Client:",
+    loading: "Loading report…",
+    notFound: "We couldn’t find this report.",
+    errorState: "The report couldn’t be generated. Contact us if you need help.",
+    downloadPdf: "Download PDF",
+    scheduleCta: "Want us to review this with you?",
+    scheduleButton: "Schedule a call",
+    scheduleCta15m:
+      "We’ll walk you through exactly how to put this into practice on a 15-minute call.",
+    pdfCtaLinkLabel: "Open link",
+    opportunityBadge: "Opportunity level",
+    insightsTitle: "Key insights",
+    impactTitle: "Estimated impact",
+    impactTime: "Time savings",
+    impactOps: "Operational improvement",
+    impactBusiness: "Business potential",
+    impactNarrativeSubtitle: "In more detail",
+    scheduleButtonCompact: "Book 15 min",
+    reportAsideCtaTitle: "Next step",
+    reportScrollHintAria: "Scroll to read the full report",
+    primaryRecLabel: "Recommended focus",
+    primaryRec: {
+      automate: "Automate processes",
+      validate_first: "Validate before investing",
+      build_mvp: "Build an MVP",
+      do_not_invest_yet: "Don’t invest yet — clarify first",
+    },
+    sections: {
+      summary: "Summary",
+      problem: "Context analysis",
+      opportunity: "Opportunity",
+      risks: "Risks to consider",
+      recommendation: "Recommendation",
+      impact: "Estimated impact",
+      nextSteps: "Next steps",
+    },
+  },
+  adminDiagnostics: {
+    title: "AI diagnostics",
+    navBack: "← Back to dashboard",
+    empty: "No diagnostics yet.",
+    cols: {
+      name: "Name",
+      company: "Company",
+      type: "Type",
+      opportunity: "Opportunity",
+      date: "Date",
+    },
+    viewReport: "View report",
+    detailTitle: "Diagnostic detail",
   },
 };

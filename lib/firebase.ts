@@ -36,3 +36,7 @@ export function getFirestoreDb(): Firestore {
 export function getLeadsCollectionName(): string {
   return process.env.NEXT_PUBLIC_FIRESTORE_CONTACT_COLLECTION ?? "contact_requests";
 }
+
+export function getDiagnosticsCollectionName(): string {
+  return process.env.NEXT_PUBLIC_FIRESTORE_DIAGNOSTICS_COLLECTION ?? "diagnostics";
+}

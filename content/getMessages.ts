@@ -10,7 +10,14 @@ export function isLocale(s: string): s is Locale {
 }
 
 export function getMessages(locale: string): SiteMessages {
-  return isLocale(locale) ? (locale === "es" ? messagesEs : messagesEn) : messagesEn;
+  const base = isLocale(locale) ? (locale === "es" ? messagesEs : messagesEn) : messagesEn;
+  return {
+    ...base,
+    report: {
+      ...base.report,
+      scheduleUrl: process.env.NEXT_PUBLIC_SCHEDULE_URL ?? "",
+    },
+  };
 }
 
 /** Accept-Language: prefer Spanish if any tag starts with es; otherwise English. */

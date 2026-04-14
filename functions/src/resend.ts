@@ -1,0 +1,283 @@
+import { Resend } from "resend";
+
+/** Aligned with `primaryRecommendationSchema` / report UI. */
+export type EmailPrimaryRecommendation =
+  | "automate"
+  | "validate_first"
+  | "build_mvp"
+  | "do_not_invest_yet";
+
+export async function sendDiagnosticEmail(opts: {
+  to: string;
+  name: string;
+  reportUrl: string;
+  language: "es" | "en";
+  opportunityLevel?: "high" | "medium" | "low";
+  summaryPreview?: string;
+  reportTitle?: string;
+  primaryRecommendation?: EmailPrimaryRecommendation;
+  keyInsightLines?: string[];
+  recommendationTeaser?: string;
+}): Promise<void> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    console.warn("RESEND_API_KEY missing; skipping email");
+    return;
+  }
+  const resend = new Resend(key);
+  const from = process.env.RESEND_FROM ?? "contacto@teamaurora.pe";
+  const siteUrl = (process.env.SITE_URL ?? "https://teamaurora.pe").replace(/\/$/, "");
+  /** Horizontal wordmark (~5:1); do not force square dimensions in HTML. */
+  const logoUrl = process.env.EMAIL_LOGO_URL ?? `${siteUrl}/brand_assets/LOGO_WHITE.svg`;
+
+  const titleForSubject = opts.reportTitle?.trim();
+  const subject =
+    opts.language === "es"
+      ? titleForSubject
+        ? `${truncatePlain(titleForSubject, 52)} — Informe Aurora`
+        : "Tu informe Aurora: ideas clave, riesgos y próximos pasos"
+      : titleForSubject
+        ? `${truncatePlain(titleForSubject, 52)} — Aurora report`
+        : "Your Aurora report: key insights, risks, and next steps";
+
+  const oppLabelEs =
+    opts.opportunityLevel === "high"
+      ? "Alta"
+      : opts.opportunityLevel === "medium"
+        ? "Media"
+        : opts.opportunityLevel === "low"
+          ? "Baja"
+          : "";
+  const oppLabelEn =
+    opts.opportunityLevel === "high"
+      ? "High"
+      : opts.opportunityLevel === "medium"
+        ? "Medium"
+        : opts.opportunityLevel === "low"
+          ? "Low"
+          : "";
+
+  const summaryHtml = formatPreviewBlock(opts.summaryPreview, 200);
+  const insights = (opts.keyInsightLines ?? [])
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s) => escapeHtml(truncatePlain(s, 200)));
+
+  const primaryLineEs =
+    opts.primaryRecommendation != null
+      ? primaryRecommendationLabel(opts.primaryRecommendation, "es")
+      : "";
+  const primaryLineEn =
+    opts.primaryRecommendation != null
+      ? primaryRecommendationLabel(opts.primaryRecommendation, "en")
+      : "";
+
+  const recTeaserHtml = opts.recommendationTeaser?.trim()
+    ? escapeHtml(truncatePlain(opts.recommendationTeaser.trim(), 220))
+    : "";
+
+  const safeReportUrl = escapeHtml(opts.reportUrl);
+  const plainUrlForEmail = opts.reportUrl;
+
+  const htmlEs = buildBrandedHtml({
+    lang: "es",
+    preheader:
+      "En el informe: nivel de oportunidad, ideas clave, riesgos, recomendación y próximos pasos.",
+    headline:
+      opts.reportTitle?.trim() || "Tu informe ya está listo: contexto, riesgos y qué hacer después",
+    name: escapeHtml(opts.name),
+    intro:
+      "Preparamos un análisis orientativo con lo que compartiste: no sustituye una reunión, pero sí ordena el panorama. En el informe encontrarás ideas clave, riesgos a considerar, una recomendación y próximos pasos concretos — además del detalle que ves resumido abajo.",
+    opportunityBadge: oppLabelEs ? `Nivel de oportunidad: ${oppLabelEs}` : "",
+    primarySectionTitle: "Enfoque sugerido",
+    primaryLine: primaryLineEs,
+    whatsInsideTitle: "Dentro del informe",
+    insightItems: insights,
+    execSummaryTitle: "Resumen ejecutivo",
+    summaryHtml,
+    recTeaserTitle: "Adelanto de la recomendación",
+    recTeaserHtml,
+    cta: "Abrir informe completo",
+    fallbackLinkLabel: "Si el botón no funciona, copia y pega este enlace en el navegador:",
+    reportUrl: safeReportUrl,
+    plainReportUrl: escapeHtml(plainUrlForEmail),
+    logoUrl: escapeHtml(logoUrl),
+    footer: `© Aurora · <a href="${escapeHtml(siteUrl)}" style="color:#7a8a99;text-decoration:none;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a>`,
+  });
+
+  const htmlEn = buildBrandedHtml({
+    lang: "en",
+    preheader:
+      "In the report: opportunity level, key insights, risks, recommendation, and next steps.",
+    headline:
+      opts.reportTitle?.trim() ||
+      "Your report is ready: context, risks, and what to do next",
+    name: escapeHtml(opts.name),
+    intro:
+      "We prepared an orientative analysis from what you shared — it doesn’t replace a conversation, but it frames the situation. Inside you’ll find key insights, risks, a clear recommendation, and concrete next steps, plus the detail summarized below.",
+    opportunityBadge: oppLabelEn ? `Opportunity level: ${oppLabelEn}` : "",
+    primarySectionTitle: "Suggested focus",
+    primaryLine: primaryLineEn,
+    whatsInsideTitle: "What’s inside",
+    insightItems: insights,
+    execSummaryTitle: "Executive summary",
+    summaryHtml,
+    recTeaserTitle: "Recommendation preview",
+    recTeaserHtml,
+    cta: "Open full report",
+    fallbackLinkLabel: "If the button doesn’t work, copy and paste this link into your browser:",
+    reportUrl: safeReportUrl,
+    plainReportUrl: escapeHtml(plainUrlForEmail),
+    logoUrl: escapeHtml(logoUrl),
+    footer: `© Aurora · <a href="${escapeHtml(siteUrl)}" style="color:#7a8a99;text-decoration:none;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a>`,
+  });
+
+  await resend.emails.send({
+    from,
+    to: opts.to,
+    subject,
+    html: opts.language === "es" ? htmlEs : htmlEn,
+  });
+}
+
+function truncatePlain(s: string, max: number): string {
+  const t = s.trim();
+  if (t.length <= max) return t;
+  return `${t.slice(0, max).trim()}…`;
+}
+
+function primaryRecommendationLabel(
+  key: EmailPrimaryRecommendation,
+  lang: "es" | "en",
+): string {
+  const es: Record<EmailPrimaryRecommendation, string> = {
+    automate: "Priorizar automatización y alivio operativo donde el retorno sea claro.",
+    validate_first: "Validar supuestos antes de invertir fuerte en construcción.",
+    build_mvp: "Avanzar con un MVP acotado para aprender rápido con usuarios reales.",
+    do_not_invest_yet: "Aclarar alcance y riesgos antes de comprometer inversión relevante.",
+  };
+  const en: Record<EmailPrimaryRecommendation, string> = {
+    automate: "Prioritize automation and operational relief where payoff is clear.",
+    validate_first: "Validate assumptions before heavy build or spend.",
+    build_mvp: "Move forward with a scoped MVP to learn quickly with real users.",
+    do_not_invest_yet: "Clarify scope and risk before committing significant investment.",
+  };
+  return lang === "es" ? es[key] : en[key];
+}
+
+function formatPreviewBlock(text: string | undefined, max: number): string {
+  if (!text?.trim()) return "";
+  const raw = text.trim();
+  const truncated = raw.length > max;
+  const t = truncated ? `${raw.slice(0, max).trim()}…` : raw;
+  return escapeHtml(t);
+}
+
+type BuildParams = {
+  lang: string;
+  preheader: string;
+  headline: string;
+  name: string;
+  intro: string;
+  opportunityBadge: string;
+  primarySectionTitle: string;
+  primaryLine: string;
+  whatsInsideTitle: string;
+  insightItems: string[];
+  execSummaryTitle: string;
+  summaryHtml: string;
+  recTeaserTitle: string;
+  recTeaserHtml: string;
+  cta: string;
+  fallbackLinkLabel: string;
+  reportUrl: string;
+  plainReportUrl: string;
+  logoUrl: string;
+  footer: string;
+};
+
+function buildBrandedHtml(p: BuildParams): string {
+  const preheaderRow = `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${escapeHtml(p.preheader)}</div>`;
+
+  const badgeRow = p.opportunityBadge
+    ? `<tr><td style="padding:0 28px 12px 28px;font-size:13px;color:#006ea0;font-weight:600;border-left:3px solid #006ea0;padding-left:25px;">${escapeHtml(p.opportunityBadge)}</td></tr>`
+    : "";
+
+  const primaryRow =
+    p.primaryLine.trim().length > 0
+      ? `<tr><td style="padding:0 28px 16px 28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(0,110,160,0.08);border-radius:12px;border:1px solid rgba(0,110,160,0.25);">
+<tr><td style="padding:14px 16px;font-size:12px;font-weight:600;color:#7dd3fc;text-transform:uppercase;letter-spacing:0.04em;">${escapeHtml(p.primarySectionTitle)}</td></tr>
+<tr><td style="padding:0 16px 16px 16px;font-size:14px;line-height:1.55;color:#c5d0dc;">${escapeHtml(p.primaryLine)}</td></tr>
+</table>
+</td></tr>`
+      : "";
+
+  const insightsRow =
+    p.insightItems.length > 0
+      ? `<tr><td style="padding:0 28px 16px 28px;">
+<p style="margin:0 0 10px 0;font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">${escapeHtml(p.whatsInsideTitle)}</p>
+<ul style="margin:0;padding:0 0 0 20px;color:#a8b4c0;font-size:14px;line-height:1.55;">
+${p.insightItems.map((item) => `<li style="margin:0 0 8px 0;">${item}</li>`).join("")}
+</ul>
+</td></tr>`
+      : "";
+
+  const summaryBlock = p.summaryHtml
+    ? `<tr><td style="padding:0 28px 16px 28px;">
+<p style="margin:0 0 8px 0;font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">${escapeHtml(p.execSummaryTitle)}</p>
+<div style="font-size:14px;line-height:1.55;color:#cbd5e1;border-left:3px solid #006ea0;padding-left:14px;">${p.summaryHtml}</div>
+</td></tr>`
+    : "";
+
+  const recBlock = p.recTeaserHtml
+    ? `<tr><td style="padding:0 28px 18px 28px;">
+<p style="margin:0 0 8px 0;font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">${escapeHtml(p.recTeaserTitle)}</p>
+<div style="font-size:14px;line-height:1.55;color:#a8b4c0;font-style:italic;">${p.recTeaserHtml}</div>
+</td></tr>`
+    : "";
+
+  const fallbackRow = `<tr><td style="padding:0 28px 24px 28px;font-size:12px;line-height:1.5;color:#7a8a99;word-break:break-all;">
+${escapeHtml(p.fallbackLinkLabel)}<br/>
+<span style="color:#94a3b8;">${p.plainReportUrl}</span>
+</td></tr>`;
+
+  return `<!DOCTYPE html>
+<html lang="${p.lang}">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/></head>
+<body style="margin:0;background:#0f1419;font-family:Segoe UI,system-ui,sans-serif;">
+${preheaderRow}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0f1419;padding:32px 16px;">
+<tr><td align="center">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#151b24;border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;">
+<tr><td style="padding:28px 28px 8px 28px;">
+<img src="${p.logoUrl}" alt="Aurora" width="200" height="40" style="display:block;width:200px;max-width:100%;height:auto;border:0;outline:none;"/>
+</td></tr>
+<tr><td style="padding:8px 28px 8px 28px;font-size:21px;font-weight:700;color:#f0f4f8;line-height:1.3;">${escapeHtml(p.headline)}</td></tr>
+<tr><td style="padding:0 28px 16px 28px;font-size:15px;line-height:1.55;color:#a8b4c0;">Hola ${p.name},</td></tr>
+<tr><td style="padding:0 28px 18px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.intro)}</td></tr>
+${badgeRow}
+${primaryRow}
+${insightsRow}
+${summaryBlock}
+${recBlock}
+<tr><td style="padding:8px 28px 24px 28px;">
+<a href="${p.reportUrl}" style="display:inline-block;background:#006ea0;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:999px;">${escapeHtml(p.cta)}</a>
+</td></tr>
+${fallbackRow}
+<tr><td style="padding:0 28px 28px 28px;font-size:13px;line-height:1.5;color:#7a8a99;">${p.footer}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
