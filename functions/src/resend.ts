@@ -26,9 +26,13 @@ export async function sendDiagnosticEmail(opts: {
   }
   const resend = new Resend(key);
   const from = process.env.RESEND_FROM ?? "contacto@teamaurora.pe";
-  const siteUrl = (process.env.SITE_URL ?? "https://teamaurora.pe").replace(/\/$/, "");
+  const siteUrl = (process.env.SITE_URL ?? "https://teamaurora.pe").replace(
+    /\/$/,
+    "",
+  );
   /** Horizontal wordmark (~5:1); do not force square dimensions in HTML. */
-  const logoUrl = process.env.EMAIL_LOGO_URL ?? `${siteUrl}/brand_assets/LOGO_WHITE.svg`;
+  const logoUrl =
+    process.env.EMAIL_LOGO_URL ?? `${siteUrl}/brand_assets/LOGO_WHITE.svg`;
 
   const titleForSubject = opts.reportTitle?.trim();
   const subject =
@@ -85,7 +89,8 @@ export async function sendDiagnosticEmail(opts: {
     preheader:
       "En el informe: nivel de oportunidad, ideas clave, riesgos, recomendación y próximos pasos.",
     headline:
-      opts.reportTitle?.trim() || "Tu informe ya está listo: contexto, riesgos y qué hacer después",
+      opts.reportTitle?.trim() ||
+      "Tu informe ya está listo: contexto, riesgos y qué hacer después",
     name: escapeHtml(opts.name),
     intro:
       "Preparamos un análisis orientativo con lo que compartiste: no sustituye una reunión, pero sí ordena el panorama. En el informe encontrarás ideas clave, riesgos a considerar, una recomendación y próximos pasos concretos — además del detalle que ves resumido abajo.",
@@ -99,7 +104,8 @@ export async function sendDiagnosticEmail(opts: {
     recTeaserTitle: "Adelanto de la recomendación",
     recTeaserHtml,
     cta: "Abrir informe completo",
-    fallbackLinkLabel: "Si el botón no funciona, copia y pega este enlace en el navegador:",
+    fallbackLinkLabel:
+      "Si el botón no funciona, copia y pega este enlace en el navegador:",
     reportUrl: safeReportUrl,
     plainReportUrl: escapeHtml(plainUrlForEmail),
     logoUrl: escapeHtml(logoUrl),
@@ -126,7 +132,8 @@ export async function sendDiagnosticEmail(opts: {
     recTeaserTitle: "Recommendation preview",
     recTeaserHtml,
     cta: "Open full report",
-    fallbackLinkLabel: "If the button doesn’t work, copy and paste this link into your browser:",
+    fallbackLinkLabel:
+      "If the button doesn’t work, copy and paste this link into your browser:",
     reportUrl: safeReportUrl,
     plainReportUrl: escapeHtml(plainUrlForEmail),
     logoUrl: escapeHtml(logoUrl),
@@ -152,16 +159,23 @@ function primaryRecommendationLabel(
   lang: "es" | "en",
 ): string {
   const es: Record<EmailPrimaryRecommendation, string> = {
-    automate: "Priorizar automatización y alivio operativo donde el retorno sea claro.",
-    validate_first: "Validar supuestos antes de invertir fuerte en construcción.",
-    build_mvp: "Avanzar con un MVP acotado para aprender rápido con usuarios reales.",
-    do_not_invest_yet: "Aclarar alcance y riesgos antes de comprometer inversión relevante.",
+    automate:
+      "Priorizar automatización y alivio operativo donde el retorno sea claro.",
+    validate_first:
+      "Validar supuestos antes de invertir fuerte en construcción.",
+    build_mvp:
+      "Avanzar con un MVP acotado para aprender rápido con usuarios reales.",
+    do_not_invest_yet:
+      "Aclarar alcance y riesgos antes de comprometer inversión relevante.",
   };
   const en: Record<EmailPrimaryRecommendation, string> = {
-    automate: "Prioritize automation and operational relief where payoff is clear.",
+    automate:
+      "Prioritize automation and operational relief where payoff is clear.",
     validate_first: "Validate assumptions before heavy build or spend.",
-    build_mvp: "Move forward with a scoped MVP to learn quickly with real users.",
-    do_not_invest_yet: "Clarify scope and risk before committing significant investment.",
+    build_mvp:
+      "Move forward with a scoped MVP to learn quickly with real users.",
+    do_not_invest_yet:
+      "Clarify scope and risk before committing significant investment.",
   };
   return lang === "es" ? es[key] : en[key];
 }
