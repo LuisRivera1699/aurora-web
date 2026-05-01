@@ -1,4 +1,4 @@
-import type { Viewport } from "next";
+import type { Viewport, Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
@@ -19,6 +19,17 @@ export const viewport: Viewport = {
   themeColor: "#030308",
   width: "device-width",
   initialScale: 1,
+};
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://teamaurora.pe"),
+  alternates: {
+    languages: {
+      es: "/es",
+      en: "/en",
+      "x-default": "/",
+    },
+  },
 };
 
 /** `lang` from middleware-injected `x-locale` on /es and /en routes; defaults for /admin. */

@@ -23,7 +23,7 @@ export async function generateMetadata({
       languages: {
         es: `${base.origin}/es/diagnostic`,
         en: `${base.origin}/en/diagnostic`,
-        "x-default": `${base.origin}/en/diagnostic`,
+        "x-default": `${base.origin}/diagnostic`,
       },
     },
   };

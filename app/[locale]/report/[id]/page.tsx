@@ -63,6 +63,11 @@ export async function generateMetadata({
     robots: { index: false, follow: false },
     alternates: {
       canonical: `${base.origin}/${locale}/report/${id}`,
+      languages: {
+        es: `${base.origin}/es/report/${id}`,
+        en: `${base.origin}/en/report/${id}`,
+        "x-default": `${base.origin}/report/${id}`,
+      },
     },
   };
 }

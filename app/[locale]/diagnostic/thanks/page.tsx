@@ -30,6 +30,11 @@ export async function generateMetadata({
     robots: { index: false, follow: false },
     alternates: {
       canonical: `${base.origin}/${locale}/diagnostic/thanks`,
+      languages: {
+        es: `${base.origin}/es/diagnostic/thanks`,
+        en: `${base.origin}/en/diagnostic/thanks`,
+        "x-default": `${base.origin}/diagnostic/thanks`,
+      },
     },
   };
 }
