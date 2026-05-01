@@ -214,6 +214,19 @@ export const messagesEs: SiteMessages = {
     socialAriaInstagram: "Instagram ({handle})",
     socialAriaLinkedIn: "LinkedIn — {brand}",
   },
+  notFound: {
+    title: "Esta ruta no existe",
+    description:
+      "La página que buscas no está disponible o cambió de dirección. Te llevamos de vuelta a los puntos clave para seguir explorando soluciones con IA, ingeniería y criterio.",
+    homeCta: "Volver al inicio",
+    contactCta: "Contacto",
+    panelEyebrow: "Recalcular ruta",
+    panelTitle: "No perdamos el impulso.",
+    panelDescription:
+      "Puedes iniciar un diagnóstico rápido o leer ideas recientes mientras encontramos el mejor camino para tu proyecto.",
+    diagnosticLink: "Iniciar diagnóstico IA",
+    blogLink: "Leer el blog",
+  },
   blog: {
     navLabel: "Blog",
     sectionTitle: "Aurora Blog",

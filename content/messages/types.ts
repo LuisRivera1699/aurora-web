@@ -112,6 +112,17 @@ export type SiteMessages = {
     /** Placeholder: {brand} */
     socialAriaLinkedIn: string;
   };
+  notFound: {
+    title: string;
+    description: string;
+    homeCta: string;
+    contactCta: string;
+    panelEyebrow: string;
+    panelTitle: string;
+    panelDescription: string;
+    diagnosticLink: string;
+    blogLink: string;
+  };
   blog: {
     navLabel: string;
     sectionTitle: string;
