@@ -46,30 +46,92 @@ export const messagesEn: SiteMessages = {
       "We design, develop, and ship production-ready systems in weeks—not months—combining senior engineering with applied AI where it actually creates value.",
     ctaPrimary: "Request a diagnosis",
     ctaSecondary: "See how we work",
-    photoPrefix: "Photo:",
     backgroundImage: {
       src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80",
       alt: "Team collaborating on a technology project",
-      credit: "Unsplash / Annie Spratt",
-      creditUrl:
-        "https://unsplash.com/photos/photo-of-people-sitting-in-front-of-computer-72NjxYfqNr4",
     },
   },
   about: {
     id: "about",
-    title: "About us",
-    mission:
-      "We are an AI-driven software factory: we design and build enterprise solutions with AI embedded in every phase—from discovery to deployment—with human oversight, traceability, and high quality standards. We prioritize shipped deadlines and trust in every delivery. Our goal: to be the technology partner that turns innovation into measurable business outcomes.",
-    vision:
-      "We believe in systems that scale and in putting innovation at the service of the business: solid engineering and AI applied with judgment, operational excellence, and commitment to deadlines. We work with a culture of collaboration and continuous improvement to grow our clients’ businesses—one project at a time.",
+    title: "We are a team focused on shipping systems to production",
+    subtitle:
+      "Aurora is a software factory focused on building and delivering real business systems, with speed, execution clarity, and production standards from day one.",
+    seoDescription:
+      "Meet Aurora: a software factory focused on building business systems, automation, and digital products ready to operate in production.",
+    image: {
+      src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1800&q=80",
+      alt: "Team working in a product planning session",
+    },
+    principles: {
+      title: "How we work",
+      subtitle: "Principles that guide every system we build",
+      items: [
+        {
+          title: "We build for production, not prototypes",
+          description:
+            "Every system we develop is designed to operate in real environments from day one, with standards for stability, scalability, and maintenance.",
+        },
+        {
+          title: "Speed without losing technical control",
+          description:
+            "We execute fast, but with solid architecture. We prioritize delivery in weeks without compromising system stability or quality.",
+        },
+        {
+          title: "AI only where it creates real value",
+          description:
+            "We do not use artificial intelligence as marketing. We integrate it only when it improves efficiency, automation, or system quality.",
+        },
+      ],
+    },
+    differentiators: {
+      title: "Why Aurora",
+      subtitle: "Real differences in how we build software",
+      items: [
+        {
+          title: "Small teams that execute fast",
+          description:
+            "We work with small, focused teams, which lets us make decisions quickly and move forward without bureaucracy or internal friction.",
+        },
+        {
+          title: "We build complete systems, not isolated pieces",
+          description:
+            "We do not deliver loose modules. We design and develop complete systems ready to operate in production.",
+        },
+        {
+          title: "Delivery in weeks, not long cycles",
+          description:
+            "We prioritize fast execution with clear scope, reducing delivery time without sacrificing system stability.",
+        },
+        {
+          title: "Architecture designed to scale from the start",
+          description:
+            "Every system is designed with growth, load, and the future evolution of the product or business in mind.",
+        },
+      ],
+      closingLine: "We do not build software just to deliver. We build systems to operate.",
+    },
+    experienceTitle: "Experience with systems in production",
     stats: [
-      { prefix: ">", value: "+10", label: "projects shipped to production" },
       {
-        prefix: ">",
-        value: "08",
-        label: "weeks on average to launch a project",
+        prefix: "",
+        value: "+10",
+        label: "systems in production",
+        description: "Software and platforms delivered and deployed in real business environments.",
+      },
+      {
+        prefix: "",
+        value: "8",
+        label: "weeks to a first production version",
+        description: "Average time from project start to initial functional deployment.",
       },
     ],
+    closing: {
+      title: "Ready to execute",
+      description:
+        "Business systems, process automation, and digital products ready to operate in real environments.",
+      servicesCta: "View services",
+      contactCta: "Talk to Aurora",
+    },
   },
   services: {
     id: "services",

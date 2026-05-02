@@ -33,20 +33,45 @@ export type SiteMessages = {
     subline: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    photoPrefix: string;
     backgroundImage: {
       src: string;
       alt: string;
-      credit: string;
-      creditUrl: string;
     };
   };
   about: {
     id: string;
     title: string;
-    mission: string;
-    vision: string;
-    stats: { prefix: string; value: string; label: string }[];
+    subtitle: string;
+    seoDescription: string;
+    image: {
+      src: string;
+      alt: string;
+    };
+    principles: {
+      title: string;
+      subtitle: string;
+      items: {
+        title: string;
+        description: string;
+      }[];
+    };
+    differentiators: {
+      title: string;
+      subtitle: string;
+      items: {
+        title: string;
+        description: string;
+      }[];
+      closingLine: string;
+    };
+    experienceTitle: string;
+    stats: { prefix: string; value: string; label: string; description: string }[];
+    closing: {
+      title: string;
+      description: string;
+      servicesCta: string;
+      contactCta: string;
+    };
   };
   services: {
     id: string;

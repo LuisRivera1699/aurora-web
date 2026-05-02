@@ -17,7 +17,7 @@ export async function generateMetadata({
 
   return {
     title: messages.about.title,
-    description: messages.about.mission,
+    description: messages.about.seoDescription,
     alternates: {
       canonical: `${base.origin}/${locale}/about`,
       languages: {
@@ -28,7 +28,7 @@ export async function generateMetadata({
     },
     openGraph: {
       title: `${messages.about.title} · ${messages.siteMeta.name}`,
-      description: messages.about.mission,
+      description: messages.about.seoDescription,
       url: `${base.origin}/${locale}/about`,
       locale: locale === "es" ? "es_ES" : "en_US",
       type: "website",

@@ -76,19 +76,6 @@ export function Hero({ messages }: { messages: SiteMessages }) {
               </a>
             </div>
           </Reveal>
-          <Reveal delay={0.22}>
-            <p className="text-xs text-foreground-muted/80">
-              {hero.photoPrefix}{" "}
-              <a
-                href={hero.backgroundImage.creditUrl}
-                className="underline decoration-white/30 underline-offset-2 hover:decoration-white/60"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {hero.backgroundImage.credit}
-              </a>
-            </p>
-          </Reveal>
         </div>
       </div>
     </section>
