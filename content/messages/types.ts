@@ -58,11 +58,6 @@ export type SiteMessages = {
     title: string;
     items: { title: string; description: string }[];
   };
-  techStack: {
-    id: string;
-    title: string;
-    items: { id: string; label: string }[];
-  };
   portfolio: {
     id: string;
     title: string;

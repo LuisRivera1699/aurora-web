@@ -112,33 +112,6 @@ body {
   }
 }
 
-/* Tech stack: carrusel horizontal infinito */
-@keyframes tech-marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.tech-marquee-track {
-  animation: tech-marquee-scroll 55s linear infinite;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tech-marquee-track {
-    animation: none;
-  }
-}
-
-@media (hover: hover) {
-  .tech-marquee-wrapper:hover .tech-marquee-track {
-    animation-play-state: paused;
-  }
-}
-
 /* Cursor aurora: brillo pulsante (filter only; opacity la controla el rAF del componente) */
 @keyframes cursor-aurora-breathe {
   0%,

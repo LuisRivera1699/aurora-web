@@ -7,7 +7,6 @@ import { PatternStrip } from "@/components/PatternStrip";
 import { ProductsSection } from "@/components/ProductsSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TechStackGrid } from "@/components/TechStackGrid";
 import { BlogTeaserSection } from "@/components/blog/BlogTeaserSection";
 import { DiagnosticPromoSection } from "@/components/diagnostic/DiagnosticPromoSection";
 import { getMessages, isLocale } from "@/content/getMessages";
@@ -32,7 +31,6 @@ export default async function HomePage({
         <PatternStrip variant={2} />
         <ServicesSection messages={messages} />
         <ProductsSection messages={messages} />
-        <TechStackGrid messages={messages} />
         <PortfolioSection messages={messages} />
         <BlogTeaserSection locale={locale} messages={messages} />
         <DiagnosticPromoSection locale={locale} messages={messages} />
