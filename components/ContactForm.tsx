@@ -99,7 +99,9 @@ export function ContactForm() {
           <Reveal>
             <div className="space-y-4">
               <SectionTitle id={`${contact.id}-heading`}>{contact.title}</SectionTitle>
-              <p className="max-w-md text-foreground-muted">{contact.description}</p>
+              <p className="max-w-md whitespace-pre-line text-foreground-muted">
+                {contact.description}
+              </p>
             </div>
           </Reveal>
 

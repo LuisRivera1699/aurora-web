@@ -163,9 +163,9 @@ export const messagesEs: SiteMessages = {
   },
   contact: {
     id: "contacto",
-    title: "Hablemos de tu requerimiento",
+    title: "Hablemos de tu proyecto",
     description:
-      "Cuéntanos qué necesitas: te respondemos con próximos pasos y una propuesta clara—alcance, plazos y valor—con el rigor de entrega que aplicamos en cada proyecto.",
+      "Cuéntanos qué necesitas y te respondemos con una propuesta clara: alcance, tiempos y enfoque de ejecución en días, no semanas innecesarias.\n\nTrabajamos con empresas que necesitan construir software y automatizar procesos con rapidez y precisión.",
     requirementTypes: [
       { value: "", label: "Tipo de necesidad (opcional)" },
       { value: "turnkey", label: "Proyecto llave en mano" },
@@ -197,7 +197,7 @@ export const messagesEs: SiteMessages = {
     },
     optional: "Opcional",
     sending: "Enviando…",
-    submit: "Enviar solicitud",
+    submit: "Solicitar propuesta",
     success: "Gracias. Te contactaremos pronto.",
     errorFirebase:
       "Formulario no disponible: configura Firebase en .env (NEXT_PUBLIC_FIREBASE_*).",
@@ -243,9 +243,9 @@ export const messagesEs: SiteMessages = {
     readArticle: "Leer artículo",
   },
   diagnosticPromo: {
-    title: "Diagnostica tu proyecto con IA",
+    title: "Descubre qué sistema necesita tu empresa para escalar",
     description:
-      "Responde unas preguntas breves y recibe un informe orientativo con oportunidades y próximos pasos.",
+      "Analizamos tu negocio con IA y te entregamos un diagnóstico claro con oportunidades de automatización, software o mejoras operativas.",
     cta: "Iniciar diagnóstico",
   },
   diagnosticThanks: {

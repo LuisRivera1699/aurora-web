@@ -167,9 +167,9 @@ export const messagesEn: SiteMessages = {
   },
   contact: {
     id: "contact",
-    title: "Tell us what you need",
+    title: "Let's talk about your project",
     description:
-      "Share your context: we’ll reply with next steps and a clear proposal—scope, timeline, and value—with the same delivery rigor we apply on every project.",
+      "Tell us what you need and we will reply with a clear proposal: scope, timing, and execution approach in days, not unnecessary weeks.\n\nWe work with companies that need to build software and automate processes with speed and precision.",
     requirementTypes: [
       { value: "", label: "Need type (optional)" },
       { value: "turnkey", label: "Turnkey project" },
@@ -201,7 +201,7 @@ export const messagesEn: SiteMessages = {
     },
     optional: "Optional",
     sending: "Sending…",
-    submit: "Send request",
+    submit: "Request proposal",
     success: "Thank you. We’ll be in touch soon.",
     errorFirebase:
       "Form unavailable: configure Firebase in .env (NEXT_PUBLIC_FIREBASE_*).",
@@ -247,9 +247,9 @@ export const messagesEn: SiteMessages = {
     readArticle: "Read article",
   },
   diagnosticPromo: {
-    title: "Get a free AI diagnosis",
+    title: "Discover what system your company needs to scale",
     description:
-      "Answer a few quick questions and receive an orientative brief with opportunities and next steps.",
+      "We analyze your business with AI and deliver a clear diagnosis with opportunities for automation, software, or operational improvements.",
     cta: "Start diagnosis",
   },
   diagnosticThanks: {
