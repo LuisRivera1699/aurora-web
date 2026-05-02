@@ -238,7 +238,7 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
 
   const localePrefix = `/${messages.locale}`;
   const homeHref = `${localePrefix}#inicio`;
-  const ctaHref = `${localePrefix}#${messages.contact.id}`;
+  const ctaHref = `${localePrefix}/diagnostic`;
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-surface-900/75 backdrop-blur-xl">

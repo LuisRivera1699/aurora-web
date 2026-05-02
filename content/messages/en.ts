@@ -7,13 +7,13 @@ export const messagesEn: SiteMessages = {
   locale: "en",
   siteMeta: {
     name: "AURORA",
-    tagline: "AI Driven Software Factory",
+    tagline: "Software and automation for companies that execute fast",
     description:
-      "An AI-driven software factory: we accelerate the design and delivery of enterprise-grade systems. Engineering, intelligent agents, and digital marketing—with quality, judgment, and on-time releases.",
+      "We build software and automate processes for companies that need to execute fast. Production-ready systems in weeks with senior engineering and applied AI.",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
   },
   navLinks: [
-    { href: "#about", label: "About" },
+    { href: "/en/about", label: "About" },
     { href: "#services", label: "Services" },
     { href: "#products", label: "Products" },
     { href: "#portfolio", label: "Portfolio" },
@@ -33,7 +33,7 @@ export const messagesEn: SiteMessages = {
     },
   ],
   siteHeader: {
-    ctaPrimary: "Request a proposal",
+    ctaPrimary: "Request a diagnosis",
     navMobileAria: "Sections (mobile)",
     languageSwitcherAria: "Language",
     languageEs: "ES",
@@ -42,11 +42,11 @@ export const messagesEn: SiteMessages = {
     menuCloseAria: "Close menu",
   },
   hero: {
-    headline: "Enterprise systems powered by AI",
+    headline: "We build software and automate processes for companies that need to execute fast.",
     subline:
-      "We are an AI-driven software factory: senior engineering and AI take you from strategy to production software—clear processes, reliable deadlines, and measurable outcomes.",
-    ctaPrimary: "Request a proposal",
-    ctaSecondary: "See capabilities",
+      "We design, develop, and ship production-ready systems in weeks—not months—combining senior engineering with applied AI where it actually creates value.",
+    ctaPrimary: "Request a diagnosis",
+    ctaSecondary: "See how we work",
     photoPrefix: "Photo:",
     backgroundImage: {
       src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80",

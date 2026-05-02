@@ -42,6 +42,23 @@ export function middleware(request: NextRequest) {
     return res;
   }
 
+  if (pathname === "/about") {
+    const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
+    const locale =
+      cookieLocale === "en" || cookieLocale === "es"
+        ? cookieLocale
+        : localeFromAcceptLanguage(request.headers.get("accept-language"));
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/about`;
+    const res = NextResponse.redirect(url);
+    res.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+    return res;
+  }
+
   if (pathname === "/diagnostic") {
     const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
     const locale =
@@ -95,5 +112,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/blog", "/diagnostic", "/diagnostic/thanks", "/(es|en)/:path*"],
+  matcher: ["/", "/about", "/blog", "/diagnostic", "/diagnostic/thanks", "/(es|en)/:path*"],
 };

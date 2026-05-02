@@ -2,7 +2,13 @@ import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 
-export function AboutSection({ messages }: { messages: SiteMessages }) {
+export function AboutSection({
+  messages,
+  titleAs = "h2",
+}: {
+  messages: SiteMessages;
+  titleAs?: "h1" | "h2";
+}) {
   const { about } = messages;
   return (
     <section
@@ -12,7 +18,9 @@ export function AboutSection({ messages }: { messages: SiteMessages }) {
     >
       <div className="mx-auto max-w-6xl space-y-14 px-4 sm:px-6 lg:px-8">
         <Reveal>
-          <SectionTitle id={`${about.id}-heading`}>{about.title}</SectionTitle>
+          <SectionTitle as={titleAs} id={`${about.id}-heading`}>
+            {about.title}
+          </SectionTitle>
         </Reveal>
 
         <div className="grid gap-10 md:grid-cols-2 md:gap-14">

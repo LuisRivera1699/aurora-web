@@ -1,4 +1,3 @@
-import { AboutSection } from "@/components/AboutSection";
 import { PortfolioSection } from "@/components/PortfolioSection";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
@@ -27,8 +26,6 @@ export default async function HomePage({
       <main className="flex-1">
         <Hero messages={messages} />
         <PatternStrip variant={1} />
-        <AboutSection messages={messages} />
-        <PatternStrip variant={2} />
         <ServicesSection messages={messages} />
         <ProductsSection messages={messages} />
         <PortfolioSection messages={messages} />

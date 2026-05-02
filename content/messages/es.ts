@@ -7,13 +7,13 @@ export const messagesEs: SiteMessages = {
   locale: "es",
   siteMeta: {
     name: "AURORA",
-    tagline: "AI Driven Software Factory",
+    tagline: "Software y automatización para empresas que ejecutan rápido",
     description:
-      "Software factory donde la IA acelera el diseño y el desarrollo de sistemas empresariales a medida. Desarrollo, agentes inteligentes y marketing digital, con calidad, criterio y entregas a tiempo.",
+      "Construimos software y automatizamos procesos para empresas que necesitan ejecutar rápido. Sistemas empresariales en semanas con ingeniería senior e IA aplicada.",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
   },
   navLinks: [
-    { href: "#nosotros", label: "Nosotros" },
+    { href: "/es/about", label: "Nosotros" },
     { href: "#servicios", label: "Servicios" },
     { href: "#productos", label: "Productos" },
     { href: "#portafolio", label: "Portafolio" },
@@ -33,7 +33,7 @@ export const messagesEs: SiteMessages = {
     },
   ],
   siteHeader: {
-    ctaPrimary: "Solicitar propuesta",
+    ctaPrimary: "Solicitar diagnóstico",
     navMobileAria: "Secciones (móvil)",
     languageSwitcherAria: "Selector de idioma",
     languageEs: "ES",
@@ -42,11 +42,11 @@ export const messagesEs: SiteMessages = {
     menuCloseAria: "Cerrar menú",
   },
   hero: {
-    headline: "Sistemas empresariales impulsados por IA",
+    headline: "Construimos software y automatizamos procesos para empresas que necesitan ejecutar rápido.",
     subline:
-      "Somos una AI-driven Software Factory: combinamos ingeniería senior e inteligencia artificial para ir de la estrategia al software en producción—con procesos claros, plazos cumplidos y resultados que puedes medir.",
-    ctaPrimary: "Solicitar propuesta",
-    ctaSecondary: "Ver capacidades",
+      "Diseñamos, desarrollamos y llevamos a producción sistemas empresariales en semanas, no meses, combinando ingeniería senior con inteligencia artificial aplicada donde realmente aporta valor.",
+    ctaPrimary: "Solicitar diagnóstico",
+    ctaSecondary: "Ver cómo trabajamos",
     photoPrefix: "Foto:",
     backgroundImage: {
       src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80",

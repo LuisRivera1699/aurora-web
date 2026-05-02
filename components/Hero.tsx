@@ -4,7 +4,8 @@ import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 
 export function Hero({ messages }: { messages: SiteMessages }) {
-  const { hero, contact, services } = messages;
+  const { hero, services } = messages;
+  const diagnosticHref = `/${messages.locale}/diagnostic`;
   return (
     <section
       id="inicio"
@@ -45,7 +46,7 @@ export function Hero({ messages }: { messages: SiteMessages }) {
           </div>
         </Reveal>
 
-        <div className="max-w-2xl space-y-6">
+        <div className="max-w-2xl space-y-6 lg:max-w-4xl xl:max-w-5xl">
           <Reveal delay={0.08}>
             <h1
               id="hero-heading"
@@ -62,7 +63,7 @@ export function Hero({ messages }: { messages: SiteMessages }) {
           <Reveal delay={0.18}>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
-                href={`#${contact.id}`}
+                href={diagnosticHref}
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-aurora-blue/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/25"
               >
                 {hero.ctaPrimary}
