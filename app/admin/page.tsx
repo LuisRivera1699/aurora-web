@@ -16,6 +16,12 @@ import type { ContactLeadRecord } from "@/lib/contact-lead-types";
 import { getFirestoreDb, getLeadsCollectionName, isFirebaseConfigured } from "@/lib/firebase";
 import { signOutAdmin, watchAuthState } from "@/lib/firebase-auth";
 
+const SERVICE_INTEREST_LABELS: Record<string, string> = {
+  "process-automation": "Automatización de procesos",
+  "custom-business-software": "Software empresarial a medida",
+  "digital-products-mvps": "Productos digitales y MVPs",
+};
+
 function mapDoc(id: string, data: Record<string, unknown>): ContactLeadRecord {
   return {
     id,
@@ -29,6 +35,10 @@ function mapDoc(id: string, data: Record<string, unknown>): ContactLeadRecord {
     source: String(data.source ?? ""),
     createdAt: String(data.createdAt ?? ""),
   };
+}
+
+function formatServiceInterest(value: string): string {
+  return SERVICE_INTEREST_LABELS[value] ?? value;
 }
 
 export default function AdminDashboardPage() {
@@ -214,8 +224,12 @@ export default function AdminDashboardPage() {
                   </p>
                   <p className="text-xs text-foreground-muted">
                     {lead.createdAt ? new Date(lead.createdAt).toLocaleString("es") : "—"}
-                    {lead.requirementType ? ` · ${lead.requirementType}` : ""}
                   </p>
+                  {lead.requirementType ? (
+                    <p className="text-xs font-medium text-aurora-blue/90">
+                      Servicio de interés: {formatServiceInterest(lead.requirementType)}
+                    </p>
+                  ) : null}
                   {(lead.company || lead.phone) && (
                     <p className="text-xs text-foreground-muted">
                       {[lead.company, lead.phone].filter(Boolean).join(" · ")}

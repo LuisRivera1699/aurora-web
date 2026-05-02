@@ -5,7 +5,7 @@ import { Reveal } from "@/components/Reveal";
 export function ServicesSection({ messages }: { messages: SiteMessages }) {
   const { services } = messages;
   const diagnosticHref = `/${messages.locale}/diagnostic`;
-  const contactHref = `/${messages.locale}#${messages.contact.id}`;
+  const contactHref = `/${messages.locale}`;
 
   return (
     <section
@@ -73,7 +73,7 @@ export function ServicesSection({ messages }: { messages: SiteMessages }) {
                         {item.detailsCtaLabel}
                       </a>
                       <a
-                        href={contactHref}
+                        href={`${contactHref}?service=${item.slug}#${messages.contact.id}`}
                         className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-aurora-blue/15 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/20"
                       >
                         {item.contactCtaLabel}

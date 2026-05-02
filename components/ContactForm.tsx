@@ -1,7 +1,7 @@
 "use client";
 
 import { FirebaseError } from "firebase/app";
-import { useReducer } from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import { Reveal } from "@/components/Reveal";
 import { useSiteMessages } from "@/components/SiteMessagesProvider";
 import { SectionTitle } from "@/components/SectionTitle";
@@ -36,10 +36,23 @@ function formReducer(state: State, action: Action): State {
 
 export function ContactForm() {
   const { contact, contactForm } = useSiteMessages();
+  const serviceSelectRef = useRef<HTMLSelectElement>(null);
   const [state, dispatch] = useReducer(formReducer, {
     status: "idle",
     message: "",
   });
+  const serviceValues = useMemo(
+    () => new Set(contact.requirementTypes.map((opt) => opt.value).filter(Boolean)),
+    [contact.requirementTypes],
+  );
+
+  useEffect(() => {
+    const requestedService = new URLSearchParams(window.location.search).get("service");
+    if (!requestedService || !serviceValues.has(requestedService)) return;
+    if (serviceSelectRef.current) {
+      serviceSelectRef.current.value = requestedService;
+    }
+  }, [serviceValues]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -177,6 +190,7 @@ export function ContactForm() {
                   <select
                     id="requirementType"
                     name="requirementType"
+                    ref={serviceSelectRef}
                     defaultValue=""
                     className="w-full cursor-pointer rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
                   >

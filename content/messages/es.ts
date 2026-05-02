@@ -167,15 +167,10 @@ export const messagesEs: SiteMessages = {
     description:
       "Cuéntanos qué necesitas y te respondemos con una propuesta clara: alcance, tiempos y enfoque de ejecución en días, no semanas innecesarias.\n\nTrabajamos con empresas que necesitan construir software y automatizar procesos con rapidez y precisión.",
     requirementTypes: [
-      { value: "", label: "Tipo de necesidad (opcional)" },
-      { value: "turnkey", label: "Proyecto llave en mano" },
-      { value: "ux-ui", label: "UX/UI research y diseño" },
-      { value: "marketing", label: "Marketing digital" },
-      { value: "web", label: "Web o e-commerce" },
-      { value: "mobile", label: "App móvil" },
-      { value: "ai-agents", label: "Agentes de IA / automatización" },
-      { value: "blockchain", label: "Blockchain / Web3" },
-      { value: "other", label: "Otro" },
+      { value: "", label: "Servicio de interés (opcional)" },
+      { value: "process-automation", label: "Automatización de procesos" },
+      { value: "custom-business-software", label: "Software empresarial a medida" },
+      { value: "digital-products-mvps", label: "Productos digitales y MVPs" },
     ],
   },
   contactForm: {
@@ -184,7 +179,7 @@ export const messagesEs: SiteMessages = {
       email: "Correo",
       company: "Empresa",
       phone: "Teléfono",
-      requirementType: "Tipo de necesidad",
+      requirementType: "Servicio de interés",
       message: "Requerimiento",
       required: "*",
     },
