@@ -3,7 +3,6 @@ import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { PatternStrip } from "@/components/PatternStrip";
-import { ProductsSection } from "@/components/ProductsSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BlogTeaserSection } from "@/components/blog/BlogTeaserSection";
@@ -27,11 +26,10 @@ export default async function HomePage({
         <Hero messages={messages} />
         <PatternStrip variant={1} />
         <ServicesSection messages={messages} />
-        <ProductsSection messages={messages} />
         <PortfolioSection messages={messages} />
-        <BlogTeaserSection locale={locale} messages={messages} />
         <DiagnosticPromoSection locale={locale} messages={messages} />
         <ContactForm />
+        <BlogTeaserSection locale={locale} messages={messages} />
       </main>
       <Footer messages={messages} />
     </>

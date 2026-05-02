@@ -15,7 +15,6 @@ export const messagesEn: SiteMessages = {
   navLinks: [
     { href: "/en/about", label: "About" },
     { href: "#services", label: "Services" },
-    { href: "#products", label: "Products" },
     { href: "#portfolio", label: "Portfolio" },
     { href: "/en/blog", label: "Blog" },
     { href: "/en/diagnostic", label: "AI diagnostic" },
@@ -156,12 +155,14 @@ export const messagesEn: SiteMessages = {
   },
   portfolio: {
     id: "portfolio",
+    eyebrow: "Portfolio",
     title: "Portfolio",
     description:
-      "Projects, identity, and deliverables in a browsable prototype: how we think as a software factory—applied to enterprise systems—ready to explore at your own pace.",
-    hint: "Opens Figma in a new tab.",
-    cardLine: "Interactive presentation with case studies and work samples.",
-    ctaLabel: "Open portfolio in Figma",
+      "Explore selected work, interfaces, and deliverables that show how we structure digital solutions: from the initial idea to an experience ready to operate.",
+    hint: "Opens as a browsable presentation in a new tab.",
+    cardLine: "A curated view of projects, screens, and execution criteria.",
+    highlights: ["Cases and deliverables", "Product design", "Systems ready to operate"],
+    ctaLabel: "View portfolio",
     url: process.env.NEXT_PUBLIC_PORTFOLIO_URL ?? FIGMA_PORTFOLIO_DEFAULT,
   },
   contact: {

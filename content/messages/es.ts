@@ -15,7 +15,6 @@ export const messagesEs: SiteMessages = {
   navLinks: [
     { href: "/es/about", label: "Nosotros" },
     { href: "#servicios", label: "Servicios" },
-    { href: "#productos", label: "Productos" },
     { href: "#portafolio", label: "Portafolio" },
     { href: "/es/blog", label: "Blog" },
     { href: "/es/diagnostic", label: "Diagnóstico IA" },
@@ -152,12 +151,14 @@ export const messagesEs: SiteMessages = {
   },
   portfolio: {
     id: "portafolio",
+    eyebrow: "Portafolio",
     title: "Portafolio",
     description:
-      "Proyectos, identidad y entregables en un prototipo navegable: nuestra forma de pensar la software factory aplicada a sistemas empresariales, para explorarla con calma.",
-    hint: "El enlace abre Figma en una nueva pestaña.",
-    cardLine: "Presentación interactiva con casos y muestras de trabajo.",
-    ctaLabel: "Abrir portafolio en Figma",
+      "Explora una selección de trabajos, interfaces y entregables que muestran cómo estructuramos soluciones digitales: desde la idea inicial hasta una experiencia lista para operar.",
+    hint: "Se abre como una presentación navegable en una nueva pestaña.",
+    cardLine: "Una vista curada de proyectos, pantallas y criterios de ejecución.",
+    highlights: ["Casos y entregables", "Diseño de producto", "Sistemas listos para operar"],
+    ctaLabel: "Ver portafolio",
     url: process.env.NEXT_PUBLIC_PORTFOLIO_URL ?? FIGMA_PORTFOLIO_DEFAULT,
   },
   contact: {

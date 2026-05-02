@@ -71,10 +71,12 @@ export type SiteMessages = {
   };
   portfolio: {
     id: string;
+    eyebrow: string;
     title: string;
     description: string;
     hint: string;
     cardLine: string;
+    highlights: string[];
     ctaLabel: string;
     url: string;
   };

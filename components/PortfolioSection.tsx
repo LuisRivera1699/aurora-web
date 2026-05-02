@@ -1,13 +1,13 @@
-import { siFigma } from "simple-icons";
 import type { SiteMessages } from "@/content/messages/types";
 import { Reveal } from "@/components/Reveal";
 import { SectionTitle } from "@/components/SectionTitle";
 
-function FigmaMark({ className }: { className?: string }) {
-  const { path, hex } = siFigma;
+function PortfolioMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden>
-      <path fill={`#${hex}`} d={path} />
+    <svg viewBox="0 0 48 48" className={className} fill="none" aria-hidden>
+      <rect x="7" y="10" width="34" height="28" rx="8" stroke="currentColor" strokeWidth="2.5" />
+      <path d="M15 20h18M15 27h11M31 27h2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M34 34l5-5M39 29v5M39 29h-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -24,7 +24,11 @@ export function PortfolioSection({ messages }: { messages: SiteMessages }) {
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-6">
             <Reveal>
-              <SectionTitle id={`${portfolio.id}-heading`}>{portfolio.title}</SectionTitle>
+              <div className="space-y-5">
+                <SectionTitle id={`${portfolio.id}-heading`}>
+                  {portfolio.title}
+                </SectionTitle>
+              </div>
             </Reveal>
             <Reveal delay={0.06}>
               <p className="max-w-xl text-base leading-relaxed text-foreground-muted md:text-lg">
@@ -45,13 +49,31 @@ export function PortfolioSection({ messages }: { messages: SiteMessages }) {
                 aria-hidden
               />
               <div className="gradient-border-mask relative overflow-hidden rounded-3xl bg-surface-card p-8 shadow-2xl shadow-black/30 md:p-10">
-                <div className="flex flex-col items-center gap-8 text-center">
-                  <div className="rounded-2xl bg-white p-7 shadow-lg ring-1 ring-black/5">
-                    <FigmaMark className="h-14 w-14 md:h-16 md:w-16" />
+                <div
+                  className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-aurora-blue/15 blur-3xl"
+                  aria-hidden
+                />
+                <div className="relative flex flex-col gap-8">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-aurora-blue shadow-inner">
+                      <PortfolioMark className="h-9 w-9" />
+                    </div>
+                    <p className="text-base font-semibold leading-snug text-foreground md:text-lg">
+                      {portfolio.cardLine}
+                    </p>
                   </div>
-                  <p className="max-w-sm text-sm leading-relaxed text-foreground-muted">
-                    {portfolio.cardLine}
-                  </p>
+
+                  <ul className="grid gap-3">
+                    {portfolio.highlights.map((highlight) => (
+                      <li
+                        key={highlight}
+                        className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-foreground-muted"
+                      >
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+
                   <a
                     href={portfolio.url}
                     target="_blank"
