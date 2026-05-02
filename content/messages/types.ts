@@ -50,8 +50,19 @@ export type SiteMessages = {
   };
   services: {
     id: string;
+    eyebrow: string;
     title: string;
-    items: { title: string; description: string }[];
+    subtitle: string;
+    ctaText: string;
+    ctaLabel: string;
+    items: {
+      slug: string;
+      title: string;
+      description: string;
+      detailsCtaLabel: string;
+      contactCtaLabel: string;
+      focus: string[];
+    }[];
   };
   products: {
     id: string;

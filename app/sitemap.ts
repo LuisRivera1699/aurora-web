@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllArticleSlugs } from "@/lib/articles/server";
+import { getMessages } from "@/content/getMessages";
 
 export const revalidate = 3600;
 
@@ -15,6 +16,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${origin}/es/blog`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${origin}/en/blog`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
   ];
+
+  for (const locale of ["es", "en"] as const) {
+    for (const service of getMessages(locale).services.items) {
+      entries.push({
+        url: `${origin}/${locale}/services/${service.slug}`,
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.85,
+      });
+    }
+  }
 
   const slugs = await getAllArticleSlugs();
   for (const slug of slugs) {

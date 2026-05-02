@@ -70,22 +70,47 @@ export const messagesEs: SiteMessages = {
   },
   services: {
     id: "servicios",
-    title: "Nuestros servicios",
+    eyebrow: "Servicios",
+    title: "Construimos sistemas que resuelven problemas reales de negocio y reducen fricción operativa",
+    subtitle:
+      "Diseñamos software y automatizamos procesos para empresas que necesitan ejecutar rápido, reducir trabajo manual y mejorar su operación sin fricción.",
+    ctaText: "¿No estás seguro qué necesitas? Prueba nuestro diagnóstico con IA",
+    ctaLabel: "Diagnosticar proyecto",
     items: [
       {
-        title: "Turnkey Projects",
+        slug: "process-automation",
+        title: "Automatización de procesos",
         description:
-          "Nuestra gama de soluciones integrales está diseñada para simplificar la gestión de proyectos complejos, ofreciendo un servicio llave en mano que abarca todas las etapas, desde la planificación hasta la implementación. Con un enfoque meticuloso en la ejecución eficiente y la entrega de resultados de alta calidad, nuestro equipo altamente experimentado garantiza una experiencia fluida y exitosa para nuestros clientes.",
+          "Eliminamos trabajo manual y conectamos tus sistemas para que tu operación funcione de forma automática y sin intervención constante.",
+        detailsCtaLabel: "Cómo funciona",
+        contactCtaLabel: "Aplicar ahora",
+        focus: [
+          "Reduce costos operativos",
+          "Elimina tareas repetitivas",
+          "Integra herramientas sin fricción",
+        ],
       },
       {
-        title: "UX/UI Research",
+        slug: "custom-business-software",
+        title: "Software empresarial a medida",
         description:
-          "Nuestra práctica de UX/UI Research se centra en el análisis profundo del comportamiento y las preferencias del usuario para informar el diseño de interfaces digitales altamente efectivas. Utilizando enfoques metodológicos sólidos, creamos experiencias de usuario diferenciadas que impulsan la satisfacción del cliente y el éxito comercial.",
+          "Construimos sistemas internos que reemplazan herramientas dispersas por una sola plataforma centralizada que controla tu operación.",
+        detailsCtaLabel: "Cómo lo hacemos",
+        contactCtaLabel: "Construir sistema",
+        focus: [
+          "Control total del negocio",
+          "Menos dependencia de Excel",
+          "Visibilidad real de la operación",
+        ],
       },
       {
-        title: "Marketing digital",
+        slug: "digital-products-mvps",
+        title: "Productos digitales y MVPs",
         description:
-          "Orquestamos tu presencia y adquisición con estrategia, mensajes y campañas alineadas a objetivos medibles. Trabajamos posicionamiento, contenidos y activaciones en canales digitales con foco en conversión y retorno, coordinando creatividad y analítica para que cada inversión respalde tu propuesta de valor y tus entregables de producto.",
+          "Convertimos ideas en productos funcionales listos para producción en semanas, no meses, reduciendo el tiempo entre idea y validación.",
+        detailsCtaLabel: "Cómo validamos",
+        contactCtaLabel: "Validar mi idea",
+        focus: ["Validación rápida", "Riesgo reducido", "Ejecución completa"],
       },
     ],
   },

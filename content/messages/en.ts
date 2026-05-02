@@ -74,22 +74,47 @@ export const messagesEn: SiteMessages = {
   },
   services: {
     id: "services",
-    title: "Our services",
+    eyebrow: "Services",
+    title: "We build systems that solve real business problems and reduce operational friction",
+    subtitle:
+      "We design software and automate processes for companies that need to execute fast, reduce manual work, and improve operations without friction.",
+    ctaText: "Not sure what you need? Try our AI diagnosis",
+    ctaLabel: "Diagnose project",
     items: [
       {
-        title: "Turnkey projects",
+        slug: "process-automation",
+        title: "Process automation",
         description:
-          "Our end-to-end solutions simplify complex project management with a full turnkey service from planning through implementation. With a sharp focus on execution and high-quality delivery, our experienced team ensures a smooth, successful experience for our clients.",
+          "We eliminate manual work and connect your systems so your operation runs automatically without constant intervention.",
+        detailsCtaLabel: "How it works",
+        contactCtaLabel: "Apply to my company",
+        focus: [
+          "Reduce operating costs",
+          "Eliminate repetitive tasks",
+          "Integrate tools without friction",
+        ],
       },
       {
-        title: "UX/UI research",
+        slug: "custom-business-software",
+        title: "Custom business software",
         description:
-          "Our UX/UI research practice deep-dives into user behavior and preferences to inform highly effective digital interfaces. With rigorous methods, we craft differentiated experiences that drive satisfaction and business outcomes.",
+          "We build internal systems that replace scattered tools with one centralized platform to control your operation.",
+        detailsCtaLabel: "How we build",
+        contactCtaLabel: "Build my system",
+        focus: [
+          "Total business control",
+          "Less dependency on Excel",
+          "Real operational visibility",
+        ],
       },
       {
-        title: "Digital marketing",
+        slug: "digital-products-mvps",
+        title: "Digital products and MVPs",
         description:
-          "We orchestrate your presence and acquisition with strategy, messaging, and campaigns tied to measurable goals. We work positioning, content, and digital activations focused on conversion and ROI—creative and analytics aligned with your product story.",
+          "We turn ideas into production-ready products in weeks, not months, reducing the time between idea and validation.",
+        detailsCtaLabel: "How we validate",
+        contactCtaLabel: "Validate my idea",
+        focus: ["Fast validation", "Reduced risk", "Full execution"],
       },
     ],
   },

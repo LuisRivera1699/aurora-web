@@ -92,8 +92,16 @@ function resolveNavHref(href: string, localePrefix: string) {
   return href;
 }
 
+function isServicesNavItem(href: string) {
+  return href === "#servicios" || href === "#services";
+}
+
+function resolveServiceHref(localePrefix: string, slug: string) {
+  return `${localePrefix}/services/${slug}`;
+}
+
 function MobileDrawer({ menuOpen, onClose, messages, panelTitleId, localePrefix }: MobileDrawerProps) {
-  const { navLinks, siteMeta, siteHeader } = messages;
+  const { navLinks, services, siteMeta, siteHeader } = messages;
   const homeHref = `${localePrefix}#inicio`;
   const reduceMotion = useReducedMotion();
 
@@ -182,19 +190,45 @@ function MobileDrawer({ menuOpen, onClose, messages, panelTitleId, localePrefix 
               initial="hidden"
               animate="show"
             >
-              {navLinks.map((item) => (
-                <motion.a
-                  key={item.href}
-                  href={resolveNavHref(item.href, localePrefix)}
-                  variants={itemVariantsResolved}
-                  className="group relative flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-3.5 text-[15px] font-medium tracking-wide text-foreground-muted transition-[color,background-color,border-color,transform] hover:border-white/10 hover:bg-white/[0.06] hover:text-foreground active:scale-[0.985]"
-                  onClick={onClose}
-                >
-                  <span className="pointer-events-none absolute inset-y-2 left-0 w-0.5 rounded-full bg-gradient-to-b from-aurora-purple to-aurora-blue opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="pl-1">{item.label}</span>
-                  <ChevronIcon className="h-[18px] w-[18px] shrink-0 text-foreground-muted/50 transition-all group-hover:translate-x-0.5 group-hover:text-aurora-blue/90" />
-                </motion.a>
-              ))}
+              {navLinks.map((item) =>
+                isServicesNavItem(item.href) ? (
+                  <motion.div key={item.href} variants={itemVariantsResolved} className="space-y-1.5">
+                    <a
+                      href={resolveNavHref(item.href, localePrefix)}
+                      className="group relative flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-3.5 text-[15px] font-medium tracking-wide text-foreground-muted transition-[color,background-color,border-color,transform] hover:border-white/10 hover:bg-white/[0.06] hover:text-foreground active:scale-[0.985]"
+                      onClick={onClose}
+                    >
+                      <span className="pointer-events-none absolute inset-y-2 left-0 w-0.5 rounded-full bg-gradient-to-b from-aurora-purple to-aurora-blue opacity-0 transition-opacity group-hover:opacity-100" />
+                      <span className="pl-1">{item.label}</span>
+                      <ChevronIcon className="h-[18px] w-[18px] shrink-0 rotate-90 text-foreground-muted/50 transition-all group-hover:text-aurora-blue/90" />
+                    </a>
+                    <div className="ml-3 space-y-1 border-l border-white/10 pl-3">
+                      {services.items.map((service) => (
+                        <a
+                          key={service.slug}
+                          href={resolveServiceHref(localePrefix, service.slug)}
+                          className="block rounded-lg px-3 py-2 text-sm font-medium text-foreground-muted/85 transition-colors hover:bg-white/[0.06] hover:text-foreground"
+                          onClick={onClose}
+                        >
+                          {service.title}
+                        </a>
+                      ))}
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.a
+                    key={item.href}
+                    href={resolveNavHref(item.href, localePrefix)}
+                    variants={itemVariantsResolved}
+                    className="group relative flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-3.5 text-[15px] font-medium tracking-wide text-foreground-muted transition-[color,background-color,border-color,transform] hover:border-white/10 hover:bg-white/[0.06] hover:text-foreground active:scale-[0.985]"
+                    onClick={onClose}
+                  >
+                    <span className="pointer-events-none absolute inset-y-2 left-0 w-0.5 rounded-full bg-gradient-to-b from-aurora-purple to-aurora-blue opacity-0 transition-opacity group-hover:opacity-100" />
+                    <span className="pl-1">{item.label}</span>
+                    <ChevronIcon className="h-[18px] w-[18px] shrink-0 text-foreground-muted/50 transition-all group-hover:translate-x-0.5 group-hover:text-aurora-blue/90" />
+                  </motion.a>
+                ),
+              )}
             </motion.nav>
           </motion.aside>
         </>
@@ -204,7 +238,7 @@ function MobileDrawer({ menuOpen, onClose, messages, panelTitleId, localePrefix 
 }
 
 export function SiteHeader({ messages }: { messages: SiteMessages }) {
-  const { siteMeta, siteHeader } = messages;
+  const { services, siteMeta, siteHeader } = messages;
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -263,17 +297,49 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
 
           <nav
             aria-label="Principal"
-            className="-mx-1 hidden min-w-0 flex-1 justify-center gap-0.5 overflow-hidden py-1 md:flex md:items-center md:gap-1"
+            className="-mx-1 hidden min-w-0 flex-1 justify-center gap-0.5 overflow-visible py-1 md:flex md:items-center md:gap-1"
           >
-            {messages.navLinks.map((item) => (
-              <a
-                key={item.href}
-                href={resolveNavHref(item.href, localePrefix)}
-                className="shrink-0 rounded-lg px-2.5 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground lg:px-3"
-              >
-                {item.label}
-              </a>
-            ))}
+            {messages.navLinks.map((item) =>
+              isServicesNavItem(item.href) ? (
+                <div key={item.href} className="group relative shrink-0">
+                  <a
+                    href={resolveNavHref(item.href, localePrefix)}
+                    className="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground focus-visible:bg-white/5 focus-visible:text-foreground lg:px-3"
+                  >
+                    {item.label}
+                    <ChevronIcon className="h-3.5 w-3.5 rotate-90 text-foreground-muted/60 transition-colors group-hover:text-aurora-blue/90" />
+                  </a>
+                  <div className="invisible absolute left-1/2 top-full z-50 mt-3 w-80 -translate-x-1/2 rounded-2xl border border-white/10 bg-surface-900/95 p-2 opacity-0 shadow-2xl shadow-black/40 backdrop-blur-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <div
+                      className="pointer-events-none absolute inset-x-6 -top-px h-px bg-gradient-to-r from-transparent via-aurora-blue/70 to-transparent"
+                      aria-hidden
+                    />
+                    {services.items.map((service) => (
+                      <a
+                        key={service.slug}
+                        href={resolveServiceHref(localePrefix, service.slug)}
+                        className="group/item block rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.06] focus-visible:bg-white/[0.06]"
+                      >
+                        <span className="block text-sm font-semibold text-foreground transition-colors group-hover/item:text-aurora-blue">
+                          {service.title}
+                        </span>
+                        <span className="mt-1 line-clamp-2 block text-xs leading-relaxed text-foreground-muted">
+                          {service.description}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={item.href}
+                  href={resolveNavHref(item.href, localePrefix)}
+                  className="shrink-0 rounded-lg px-2.5 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground lg:px-3"
+                >
+                  {item.label}
+                </a>
+              ),
+            )}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
