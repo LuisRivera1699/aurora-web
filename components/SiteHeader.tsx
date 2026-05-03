@@ -7,6 +7,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import type { SiteMessages } from "@/content/messages/types";
+import { pushClickCtaEvent } from "@/lib/gtm-events";
 
 function MenuIcon({ className }: { className?: string }) {
   return (
@@ -94,6 +95,10 @@ function resolveNavHref(href: string, localePrefix: string) {
 
 function isServicesNavItem(href: string) {
   return href === "#servicios" || href === "#services";
+}
+
+function isContactNavItem(href: string) {
+  return href === "#contacto" || href === "#contact";
 }
 
 function resolveServiceHref(localePrefix: string, slug: string) {
@@ -221,7 +226,10 @@ function MobileDrawer({ menuOpen, onClose, messages, panelTitleId, localePrefix 
                     href={resolveNavHref(item.href, localePrefix)}
                     variants={itemVariantsResolved}
                     className="group relative flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-3.5 text-[15px] font-medium tracking-wide text-foreground-muted transition-[color,background-color,border-color,transform] hover:border-white/10 hover:bg-white/[0.06] hover:text-foreground active:scale-[0.985]"
-                    onClick={onClose}
+                    onClick={() => {
+                      if (isContactNavItem(item.href)) pushClickCtaEvent("header");
+                      onClose();
+                    }}
                   >
                     <span className="pointer-events-none absolute inset-y-2 left-0 w-0.5 rounded-full bg-gradient-to-b from-aurora-purple to-aurora-blue opacity-0 transition-opacity group-hover:opacity-100" />
                     <span className="pl-1">{item.label}</span>
@@ -334,6 +342,9 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
                 <a
                   key={item.href}
                   href={resolveNavHref(item.href, localePrefix)}
+                  onClick={() => {
+                    if (isContactNavItem(item.href)) pushClickCtaEvent("header");
+                  }}
                   className="shrink-0 rounded-lg px-2.5 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground lg:px-3"
                 >
                   {item.label}

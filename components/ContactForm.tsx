@@ -10,6 +10,21 @@ import { submitContactLead } from "@/lib/submit-contact-lead";
 
 const CONTACT_EMAIL = "contacto@teamaurora.pe";
 
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
+  }
+}
+
+function pushGenerateLeadEvent(formLocation: string) {
+  window.dataLayer = window.dataLayer ?? [];
+  window.dataLayer.push({
+    event: "generate_lead",
+    form_type: "contact",
+    form_location: formLocation,
+  });
+}
+
 type State = {
   status: "idle" | "loading" | "success" | "error";
   message: string;
@@ -69,6 +84,7 @@ type ContactFormProps = {
   hideRequirementType?: boolean;
   messageLabel?: string;
   messagePlaceholder?: string;
+  formLocation?: string;
 };
 
 export function ContactForm({
@@ -78,6 +94,7 @@ export function ContactForm({
   hideRequirementType = false,
   messageLabel,
   messagePlaceholder,
+  formLocation = "home",
 }: ContactFormProps = {}) {
   const { contact, contactForm } = useSiteMessages();
   const formRef = useRef<HTMLFormElement>(null);
@@ -148,6 +165,7 @@ export function ContactForm({
         phone,
         requirementType,
       });
+      pushGenerateLeadEvent(formLocation);
       dispatch({ type: "success" });
       form.reset();
       updateFormValidity(form);

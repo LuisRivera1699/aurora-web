@@ -28,7 +28,7 @@ export default async function HomePage({
         <ServicesSection messages={messages} />
         <PortfolioSection messages={messages} />
         <DiagnosticPromoSection locale={locale} messages={messages} />
-        <ContactForm />
+        <ContactForm formLocation="home" />
         <BlogTeaserSection locale={locale} messages={messages} />
       </main>
       <Footer messages={messages} />

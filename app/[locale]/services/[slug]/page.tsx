@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
+import { GtmTrackedLink } from "@/components/GtmTrackedLink";
 import { SectionTitle } from "@/components/SectionTitle";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/seo/StructuredData";
@@ -65,6 +66,18 @@ const SERVICE_HERO_IMAGES: Record<string, string> = {
   "process-automation": PROCESS_AUTOMATION_HERO_IMAGE,
   "custom-business-software": CUSTOM_BUSINESS_SOFTWARE_HERO_IMAGE,
   "digital-products-mvps": DIGITAL_PRODUCTS_MVPS_HERO_IMAGE,
+};
+
+const SERVICE_FORM_LOCATIONS: Record<string, string> = {
+  "process-automation": "process automation",
+  "custom-business-software": "custom business software",
+  "digital-products-mvps": "digital products mvps",
+};
+
+const SERVICE_HERO_CTA_LOCATIONS: Record<string, string> = {
+  "process-automation": "automation",
+  "custom-business-software": "software",
+  "digital-products-mvps": "mvp",
 };
 
 const SERVICE_PAGE_CONTENT: Record<string, Record<"es" | "en", ServicePageContent>> = {
@@ -719,12 +732,13 @@ export default async function ServicePage({
                   <p className="max-w-2xl text-lg leading-relaxed text-foreground-muted md:text-xl">
                     {pageContent.subtitle}
                   </p>
-                  <a
+                  <GtmTrackedLink
                     href={localContactHref}
+                    trackingLocation={SERVICE_HERO_CTA_LOCATIONS[service.slug]}
                     className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-aurora-blue/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/25"
                   >
                     {pageContent.primaryCta}
-                  </a>
+                  </GtmTrackedLink>
                 </div>
               </div>
             </section>
@@ -845,6 +859,7 @@ export default async function ServicePage({
               title={pageContent.contact.title}
               description={pageContent.contact.body}
               requirementTypeValue={service.slug}
+              formLocation={SERVICE_FORM_LOCATIONS[service.slug]}
               hideRequirementType
               messageLabel={pageContent.contact.messageLabel}
               messagePlaceholder={pageContent.contact.messagePlaceholder}

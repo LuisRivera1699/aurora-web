@@ -1,6 +1,13 @@
 import type { SiteMessages } from "@/content/messages/types";
+import { GtmTrackedLink } from "@/components/GtmTrackedLink";
 import { MotionCard } from "@/components/MotionCard";
 import { Reveal } from "@/components/Reveal";
+
+const HOME_SERVICE_CTA_LOCATIONS: Record<string, string> = {
+  "process-automation": "home_automation",
+  "custom-business-software": "home_software",
+  "digital-products-mvps": "home_mvp",
+};
 
 export function ServicesSection({ messages }: { messages: SiteMessages }) {
   const { services } = messages;
@@ -72,12 +79,13 @@ export function ServicesSection({ messages }: { messages: SiteMessages }) {
                       >
                         {item.detailsCtaLabel}
                       </a>
-                      <a
+                      <GtmTrackedLink
                         href={`${contactHref}?service=${item.slug}#${messages.contact.id}`}
+                        trackingLocation={HOME_SERVICE_CTA_LOCATIONS[item.slug] ?? "home_automation"}
                         className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-aurora-blue/15 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/20"
                       >
                         {item.contactCtaLabel}
-                      </a>
+                      </GtmTrackedLink>
                     </div>
                   </div>
                 </MotionCard>

@@ -20,6 +20,19 @@ type DiagnosticWizardProps = {
   messages: SiteMessages;
 };
 
+function pushGenerateDiagnosticEvent(type: UserType) {
+  const windowWithDataLayer = window as Window & {
+    dataLayer?: Array<Record<string, unknown>>;
+  };
+
+  windowWithDataLayer.dataLayer = windowWithDataLayer.dataLayer ?? [];
+  windowWithDataLayer.dataLayer.push({
+    event: "generate_diagnostic",
+    type,
+    step: "final",
+  });
+}
+
 const FLOW_MSG_KEY: Record<
   WizardFlowId,
   keyof SiteMessages["diagnostic"]["flows"]
@@ -106,16 +119,27 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
       const spec = FLOW_SPECS[flowId][flowStepIndex];
       if (!spec) return false;
       const v = (flowValues[spec.fieldKey] ?? "").trim();
-      if (spec.kind === "urgency") return v === "high" || v === "medium" || v === "low";
+      if (spec.kind === "urgency")
+        return v === "high" || v === "medium" || v === "low";
       return v.length >= 1;
     }
     if (phase === "contact") {
       return (
-        name.trim().length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+        name.trim().length >= 2 &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
       );
     }
     return false;
-  }, [phase, userType, companyPath, flowId, flowStepIndex, flowValues, name, email]);
+  }, [
+    phase,
+    userType,
+    companyPath,
+    flowId,
+    flowStepIndex,
+    flowValues,
+    name,
+    email,
+  ]);
 
   const goNext = () => {
     if (!canNext()) return;
@@ -176,7 +200,7 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
   };
 
   const handleSubmit = async () => {
-    if (!canNext() || !flowId) return;
+    if (!canNext() || !flowId || !userType) return;
     setError(null);
     if (!isFirebaseConfigured()) {
       setError(d.errorNotConfigured);
@@ -196,13 +220,16 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
         },
         uiLocale: locale,
         userAgent:
-          typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 512) : undefined,
+          typeof navigator !== "undefined"
+            ? navigator.userAgent.slice(0, 512)
+            : undefined,
       });
       const reportId = res.data?.reportId;
       if (!reportId) {
         setError(d.errorGeneric);
         return;
       }
+      pushGenerateDiagnosticEvent(userType);
       router.push(`/${locale}/report/${encodeURIComponent(reportId)}`);
     } catch {
       setError(d.errorGeneric);
@@ -221,8 +248,12 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
     if (spec.kind === "urgency") {
       return (
         <div className="space-y-4">
-          <h2 className="font-display text-2xl font-bold text-foreground">{copy.title}</h2>
-          <p className="text-sm leading-relaxed text-foreground-muted">{copy.description}</p>
+          <h2 className="font-display text-2xl font-bold text-foreground">
+            {copy.title}
+          </h2>
+          <p className="text-sm leading-relaxed text-foreground-muted">
+            {copy.description}
+          </p>
           <div className="mt-4 flex flex-col gap-2">
             <OptionButton
               selected={flowValues.urgency_level === "high"}
@@ -249,8 +280,12 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
 
     return (
       <div className="space-y-4">
-        <h2 className="font-display text-2xl font-bold text-foreground">{copy.title}</h2>
-        <p className="text-sm leading-relaxed text-foreground-muted">{copy.description}</p>
+        <h2 className="font-display text-2xl font-bold text-foreground">
+          {copy.title}
+        </h2>
+        <p className="text-sm leading-relaxed text-foreground-muted">
+          {copy.description}
+        </p>
         <textarea
           value={flowValues[spec.fieldKey] ?? ""}
           onChange={(e) => setFlowField(spec.fieldKey, e.target.value)}
@@ -258,7 +293,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
           rows={6}
           className="mt-2 w-full rounded-xl border border-white/10 bg-surface-card/50 px-4 py-3 text-sm text-foreground placeholder:text-foreground-muted/50 focus:border-aurora-blue/40 focus:outline-none focus:ring-2 focus:ring-aurora-blue/20"
         />
-        <p className="mt-2 text-xs leading-relaxed text-foreground-muted/85">{d.flowStepDetailHint}</p>
+        <p className="mt-2 text-xs leading-relaxed text-foreground-muted/85">
+          {d.flowStepDetailHint}
+        </p>
       </div>
     );
   };
@@ -308,7 +345,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
 
           {phase === "companyGoal" && (
             <div className="space-y-4">
-              <h2 className="font-display text-2xl font-bold text-foreground">{d.stepCompanyGoalTitle}</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {d.stepCompanyGoalTitle}
+              </h2>
               <div className="mt-6 flex flex-col gap-2">
                 <OptionButton
                   selected={companyPath === "automation"}
@@ -336,10 +375,14 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
 
           {phase === "contact" && (
             <div className="space-y-4">
-              <h2 className="font-display text-2xl font-bold text-foreground">{d.stepContactTitle}</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {d.stepContactTitle}
+              </h2>
               <div className="mt-4 space-y-3">
                 <div>
-                  <label className="text-xs font-medium text-foreground-muted">{d.labels.name}</label>
+                  <label className="text-xs font-medium text-foreground-muted">
+                    {d.labels.name}
+                  </label>
                   <input
                     type="text"
                     value={name}
@@ -350,7 +393,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground-muted">{d.labels.email}</label>
+                  <label className="text-xs font-medium text-foreground-muted">
+                    {d.labels.email}
+                  </label>
                   <input
                     type="email"
                     value={email}
@@ -361,7 +406,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground-muted">{d.labels.company}</label>
+                  <label className="text-xs font-medium text-foreground-muted">
+                    {d.labels.company}
+                  </label>
                   <input
                     type="text"
                     value={company}
@@ -371,7 +418,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground-muted">{d.labels.phone}</label>
+                  <label className="text-xs font-medium text-foreground-muted">
+                    {d.labels.phone}
+                  </label>
                   <input
                     type="text"
                     value={phone}
@@ -383,7 +432,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-foreground-muted">
-                    {userType === "freelancer" ? d.labels.webUrlFreelancer : d.labels.webUrlCompany}
+                    {userType === "freelancer"
+                      ? d.labels.webUrlFreelancer
+                      : d.labels.webUrlCompany}
                   </label>
                   <input
                     type="text"
@@ -414,7 +465,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
         </p>
       ) : null}
 
-      <div className={`mt-10 flex flex-wrap items-center gap-3 ${isFirstStep ? "justify-end" : "justify-between"}`}>
+      <div
+        className={`mt-10 flex flex-wrap items-center gap-3 ${isFirstStep ? "justify-end" : "justify-between"}`}
+      >
         {!isFirstStep ? (
           <button
             type="button"

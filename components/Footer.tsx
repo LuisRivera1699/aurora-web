@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { siInstagram } from "simple-icons";
+import { GtmTrackedLink } from "@/components/GtmTrackedLink";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import type { SiteMessages } from "@/content/messages/types";
 
@@ -15,6 +16,10 @@ function fillFooterTemplate(template: string, vars: Record<string, string>) {
 function resolveNavHref(href: string, locale: string) {
   if (href.startsWith("#")) return `/${locale}${href}`;
   return href;
+}
+
+function isContactNavItem(href: string) {
+  return href === "#contacto" || href === "#contact";
 }
 
 export function Footer({ messages }: { messages: SiteMessages }) {
@@ -79,15 +84,26 @@ export function Footer({ messages }: { messages: SiteMessages }) {
           </ul>
         </div>
         <nav aria-label={footer.navAria} className="flex flex-wrap gap-x-6 gap-y-2">
-          {navLinks.map((item) => (
-            <a
-              key={item.href}
-              href={resolveNavHref(item.href, messages.locale)}
-              className="text-sm text-foreground-muted hover:text-foreground"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navLinks.map((item) =>
+            isContactNavItem(item.href) ? (
+              <GtmTrackedLink
+                key={item.href}
+                href={resolveNavHref(item.href, messages.locale)}
+                trackingLocation="footer"
+                className="text-sm text-foreground-muted hover:text-foreground"
+              >
+                {item.label}
+              </GtmTrackedLink>
+            ) : (
+              <a
+                key={item.href}
+                href={resolveNavHref(item.href, messages.locale)}
+                className="text-sm text-foreground-muted hover:text-foreground"
+              >
+                {item.label}
+              </a>
+            ),
+          )}
         </nav>
       </div>
       <div className="mx-auto mt-10 flex max-w-6xl flex-col items-center gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { SiteMessages } from "@/content/messages/types";
+import { GtmTrackedLink } from "@/components/GtmTrackedLink";
 import { Reveal } from "@/components/Reveal";
 
 export function Hero({ messages }: { messages: SiteMessages }) {
@@ -62,12 +62,13 @@ export function Hero({ messages }: { messages: SiteMessages }) {
           </Reveal>
           <Reveal delay={0.18}>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
+              <GtmTrackedLink
                 href={contactHref}
+                trackingLocation="home_hero"
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-aurora-blue/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/25"
               >
                 {hero.ctaPrimary}
-              </Link>
+              </GtmTrackedLink>
               <a
                 href={`#${services.id}`}
                 className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-base font-medium text-foreground backdrop-blur-sm transition-colors hover:border-white/35 hover:bg-white/10"
