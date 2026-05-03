@@ -9,7 +9,7 @@ export const messagesEn: SiteMessages = {
     name: "AURORA",
     tagline: "Software and automation for companies that execute fast",
     description:
-      "We build software and automate processes for companies that need to execute fast. Production-ready systems in weeks with senior engineering and applied AI.",
+      "We build business systems and automate processes for companies that need to execute fast. Production software in weeks, not months.",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
   },
   navLinks: [

@@ -79,6 +79,7 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
     () => (userType ? flowIdForSelection(userType, companyPath) : null),
     [userType, companyPath],
   );
+  const isFirstStep = phase === "profile";
 
   const totalSteps = totalWizardSteps(userType, companyPath);
 
@@ -264,7 +265,9 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
 
   return (
     <div className="w-full max-w-2xl">
-      <p className="mb-8 text-sm text-foreground-muted">{progressLabel}</p>
+      {!isFirstStep ? (
+        <p className="mb-8 text-sm text-foreground-muted">{progressLabel}</p>
+      ) : null}
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -411,15 +414,17 @@ export function DiagnosticWizard({ messages }: DiagnosticWizardProps) {
         </p>
       ) : null}
 
-      <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={goBack}
-          disabled={phase === "profile" || submitting}
-          className="cursor-pointer text-sm font-medium text-foreground-muted transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {d.back}
-        </button>
+      <div className={`mt-10 flex flex-wrap items-center gap-3 ${isFirstStep ? "justify-end" : "justify-between"}`}>
+        {!isFirstStep ? (
+          <button
+            type="button"
+            onClick={goBack}
+            disabled={submitting}
+            className="cursor-pointer text-sm font-medium text-foreground-muted transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {d.back}
+          </button>
+        ) : null}
         {phase !== "contact" ? (
           <button
             type="button"

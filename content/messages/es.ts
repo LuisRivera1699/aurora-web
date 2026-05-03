@@ -9,7 +9,7 @@ export const messagesEs: SiteMessages = {
     name: "AURORA",
     tagline: "Software y automatización para empresas que ejecutan rápido",
     description:
-      "Construimos software y automatizamos procesos para empresas que necesitan ejecutar rápido. Sistemas empresariales en semanas con ingeniería senior e IA aplicada.",
+      "Construimos sistemas empresariales y automatizamos procesos para empresas que necesitan ejecutar rápido. Software en producción en semanas, no meses.",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
   },
   navLinks: [
