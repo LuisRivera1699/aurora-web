@@ -34,7 +34,23 @@ function formReducer(state: State, action: Action): State {
   }
 }
 
-export function ContactForm() {
+type ContactFormProps = {
+  title?: string;
+  description?: string;
+  requirementTypeValue?: string;
+  hideRequirementType?: boolean;
+  messageLabel?: string;
+  messagePlaceholder?: string;
+};
+
+export function ContactForm({
+  title,
+  description,
+  requirementTypeValue,
+  hideRequirementType = false,
+  messageLabel,
+  messagePlaceholder,
+}: ContactFormProps = {}) {
   const { contact, contactForm } = useSiteMessages();
   const serviceSelectRef = useRef<HTMLSelectElement>(null);
   const [state, dispatch] = useReducer(formReducer, {
@@ -47,12 +63,18 @@ export function ContactForm() {
   );
 
   useEffect(() => {
+    if (requirementTypeValue) {
+      if (serviceSelectRef.current) {
+        serviceSelectRef.current.value = requirementTypeValue;
+      }
+      return;
+    }
     const requestedService = new URLSearchParams(window.location.search).get("service");
     if (!requestedService || !serviceValues.has(requestedService)) return;
     if (serviceSelectRef.current) {
       serviceSelectRef.current.value = requestedService;
     }
-  }, [serviceValues]);
+  }, [requirementTypeValue, serviceValues]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -100,6 +122,10 @@ export function ContactForm() {
   }
 
   const req = contactForm.labels.required;
+  const sectionTitle = title ?? contact.title;
+  const sectionDescription = description ?? contact.description;
+  const messageFieldLabel = messageLabel ?? contactForm.labels.message;
+  const messageFieldPlaceholder = messagePlaceholder ?? contactForm.placeholders.message;
 
   return (
     <section
@@ -111,9 +137,9 @@ export function ContactForm() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <Reveal>
             <div className="space-y-4">
-              <SectionTitle id={`${contact.id}-heading`}>{contact.title}</SectionTitle>
+              <SectionTitle id={`${contact.id}-heading`}>{sectionTitle}</SectionTitle>
               <p className="max-w-md whitespace-pre-line text-foreground-muted">
-                {contact.description}
+                {sectionDescription}
               </p>
             </div>
           </Reveal>
@@ -180,30 +206,34 @@ export function ContactForm() {
                     placeholder={contactForm.placeholders.phone}
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="requirementType"
-                    className="mb-1.5 block text-sm font-medium text-foreground"
-                  >
-                    {contactForm.labels.requirementType}
-                  </label>
-                  <select
-                    id="requirementType"
-                    name="requirementType"
-                    ref={serviceSelectRef}
-                    defaultValue=""
-                    className="w-full cursor-pointer rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                  >
-                    {contact.requirementTypes.map((opt) => (
-                      <option key={opt.value || "empty"} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {hideRequirementType ? (
+                  <input type="hidden" name="requirementType" value={requirementTypeValue ?? ""} />
+                ) : (
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="requirementType"
+                      className="mb-1.5 block text-sm font-medium text-foreground"
+                    >
+                      {contactForm.labels.requirementType}
+                    </label>
+                    <select
+                      id="requirementType"
+                      name="requirementType"
+                      ref={serviceSelectRef}
+                      defaultValue={requirementTypeValue ?? ""}
+                      className="w-full cursor-pointer rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
+                    >
+                      {contact.requirementTypes.map((opt) => (
+                        <option key={opt.value || "empty"} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <div className="sm:col-span-2">
                   <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-foreground">
-                    {contactForm.labels.message} <span className="text-aurora-purple">{req}</span>
+                    {messageFieldLabel} <span className="text-aurora-purple">{req}</span>
                   </label>
                   <textarea
                     id="message"
@@ -212,7 +242,7 @@ export function ContactForm() {
                     minLength={10}
                     rows={5}
                     className="w-full resize-y rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
-                    placeholder={contactForm.placeholders.message}
+                    placeholder={messageFieldPlaceholder}
                   />
                 </div>
               </div>

@@ -63,7 +63,7 @@ export const messagesEs: SiteMessages = {
       alt: "Equipo trabajando en una sesión de planificación de producto",
     },
     principles: {
-      title: "Cómo trabajamos",
+      title: "¿Cómo trabajamos?",
       subtitle: "Principios que guían cada sistema que construimos",
       items: [
         {
