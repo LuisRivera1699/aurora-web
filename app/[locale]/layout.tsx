@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CursorAurora } from "@/components/CursorAurora";
 import { SiteMessagesProvider } from "@/components/SiteMessagesProvider";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/StructuredData";
 import { getMessages, isLocale } from "@/content/getMessages";
 
 export function generateStaticParams() {
@@ -73,6 +74,8 @@ export default async function LocaleLayout({
   const messages = getMessages(locale);
   return (
     <SiteMessagesProvider messages={messages}>
+      <OrganizationJsonLd messages={messages} />
+      <WebSiteJsonLd messages={messages} />
       <CursorAurora />
       <div className="relative z-10 flex min-h-full flex-col">{children}</div>
     </SiteMessagesProvider>

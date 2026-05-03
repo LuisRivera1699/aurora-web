@@ -87,7 +87,7 @@ async function runProfiler(raw: unknown): Promise<{ reportId: string }> {
   });
 
   const reportId = docRef.id;
-  const siteUrl = (process.env.SITE_URL ?? "https://aurora.example.com").replace(/\/$/, "");
+  const siteUrl = (process.env.SITE_URL ?? "https://www.teamaurora.pe").replace(/\/$/, "");
   const pathLocale = bundle.detected_language;
   const reportUrl = `${siteUrl}/${pathLocale}/report/${encodeURIComponent(reportId)}`;
 

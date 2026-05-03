@@ -26,7 +26,7 @@ export async function sendDiagnosticEmail(opts: {
   }
   const resend = new Resend(key);
   const from = process.env.RESEND_FROM ?? "contacto@teamaurora.pe";
-  const siteUrl = (process.env.SITE_URL ?? "https://teamaurora.pe").replace(
+  const siteUrl = (process.env.SITE_URL ?? "https://www.teamaurora.pe").replace(
     /\/$/,
     "",
   );

@@ -1,4 +1,5 @@
 import type { SiteMessages } from "@/content/messages/types";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 const FIGMA_PORTFOLIO_DEFAULT =
   "https://www.figma.com/proto/rdjsRp3VmNbtR7e8o9Zd3X/Aurora?node-id=3698-404&t=twfA6KgC672rMKON-1&scaling=contain&content-scaling=fixed&page-id=338%3A2&starting-point-node-id=3698%3A404&show-proto-sidebar=1";
@@ -10,7 +11,7 @@ export const messagesEs: SiteMessages = {
     tagline: "Software y automatización para empresas que ejecutan rápido",
     description:
       "Construimos sistemas empresariales y automatizamos procesos para empresas que necesitan ejecutar rápido. Software en producción en semanas, no meses.",
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com",
+    url: getPublicSiteUrl(),
   },
   navLinks: [
     { href: "/es/about", label: "Nosotros" },

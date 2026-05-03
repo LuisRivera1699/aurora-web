@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
+import { getPublicSiteOrigin } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com";
-  const origin = new URL(base).origin;
+  const origin = getPublicSiteOrigin();
   return {
     rules: {
       userAgent: "*",

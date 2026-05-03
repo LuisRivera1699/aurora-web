@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { SectionTitle } from "@/components/SectionTitle";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BreadcrumbJsonLd, ServiceJsonLd } from "@/components/seo/StructuredData";
 import { getMessages, isLocale } from "@/content/getMessages";
 
 type ServicePageContent = {
@@ -662,9 +663,25 @@ export default async function ServicePage({
   const contactHref = `/${locale}?service=${service.slug}#${messages.contact.id}`;
   const localContactHref = `#${messages.contact.id}`;
   const heroImage = SERVICE_HERO_IMAGES[canonicalSlug] ?? PROCESS_AUTOMATION_HERO_IMAGE;
+  const origin = new URL(messages.siteMeta.url).origin;
+  const serviceUrl = `${origin}/${locale}/services/${service.slug}`;
+  const serviceDescription = pageContent?.seoDescription ?? service.description;
 
   return (
     <>
+      <ServiceJsonLd
+        messages={messages}
+        name={pageContent?.title ?? service.title}
+        description={serviceDescription}
+        url={serviceUrl}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: messages.siteMeta.name, url: `${origin}/${locale}` },
+          { name: messages.services.eyebrow, url: `${origin}/${locale}#${messages.services.id}` },
+          { name: service.title, url: serviceUrl },
+        ]}
+      />
       <SiteHeader messages={messages} />
       <main className="flex-1">
         {pageContent ? (

@@ -1,6 +1,7 @@
 import type { Viewport, Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import { headers } from "next/headers";
+import { getPublicSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,7 +23,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://teamaurora.pe"),
+  metadataBase: new URL(getPublicSiteUrl()),
   alternates: {
     languages: {
       es: "/es",

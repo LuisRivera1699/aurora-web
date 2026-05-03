@@ -10,7 +10,7 @@ async function sendDiagnosticEmail(opts) {
     }
     const resend = new resend_1.Resend(key);
     const from = process.env.RESEND_FROM ?? "contacto@teamaurora.pe";
-    const siteUrl = (process.env.SITE_URL ?? "https://teamaurora.pe").replace(/\/$/, "");
+    const siteUrl = (process.env.SITE_URL ?? "https://www.teamaurora.pe").replace(/\/$/, "");
     /** Horizontal wordmark (~5:1); do not force square dimensions in HTML. */
     const logoUrl = process.env.EMAIL_LOGO_URL ?? `${siteUrl}/brand_assets/LOGO_WHITE.svg`;
     const titleForSubject = opts.reportTitle?.trim();

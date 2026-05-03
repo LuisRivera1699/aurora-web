@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next";
 import { getAllArticleSlugs } from "@/lib/articles/server";
 import { getMessages } from "@/content/getMessages";
+import { getPublicSiteOrigin } from "@/lib/site-url";
 
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurora.example.com";
-  const origin = new URL(base).origin;
+  const origin = getPublicSiteOrigin();
   const now = new Date();
   const entries: MetadataRoute.Sitemap = [
     { url: `${origin}/es`, lastModified: now, changeFrequency: "weekly", priority: 1 },
@@ -15,6 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${origin}/en/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${origin}/es/blog`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${origin}/en/blog`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${origin}/es/diagnostic`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${origin}/en/diagnostic`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
   ];
 
   for (const locale of ["es", "en"] as const) {
