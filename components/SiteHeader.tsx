@@ -276,7 +276,7 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-surface-900/75 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-3 py-2 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-3 md:py-0 lg:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-3 py-2 sm:px-6 md:flex-row md:items-center md:gap-3 md:py-0 lg:px-8">
         <div className="flex h-12 min-h-12 w-full items-center justify-between gap-2 sm:h-14 sm:gap-3 md:h-16 md:min-h-0 md:flex-1">
           <Link
             href={homeHref}
@@ -297,7 +297,7 @@ export function SiteHeader({ messages }: { messages: SiteMessages }) {
 
           <nav
             aria-label="Principal"
-            className="-mx-1 hidden min-w-0 flex-1 justify-center gap-0.5 overflow-visible py-1 md:flex md:items-center md:gap-1"
+            className="ml-auto hidden min-w-0 justify-end gap-0.5 overflow-visible py-1 md:flex md:items-center md:gap-1"
           >
             {messages.navLinks.map((item) =>
               isServicesNavItem(item.href) ? (

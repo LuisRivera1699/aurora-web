@@ -15,9 +15,7 @@ export const messagesEn: SiteMessages = {
   navLinks: [
     { href: "/en/about", label: "About" },
     { href: "#services", label: "Services" },
-    { href: "#portfolio", label: "Portfolio" },
     { href: "/en/blog", label: "Blog" },
-    { href: "/en/diagnostic", label: "AI diagnostic" },
     { href: "#contact", label: "Contact" },
   ],
   socialLinks: [
@@ -44,7 +42,7 @@ export const messagesEn: SiteMessages = {
     headline: "We build software and automate processes for companies that need to execute fast.",
     subline:
       "We design, develop, and ship production-ready systems in weeks—not months—combining senior engineering with applied AI where it actually creates value.",
-    ctaPrimary: "Request a diagnosis",
+    ctaPrimary: "Talk to Aurora",
     ctaSecondary: "See how we work",
     backgroundImage: {
       src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80",

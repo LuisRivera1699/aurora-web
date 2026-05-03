@@ -5,7 +5,7 @@ import { Reveal } from "@/components/Reveal";
 
 export function Hero({ messages }: { messages: SiteMessages }) {
   const { hero, services } = messages;
-  const diagnosticHref = `/${messages.locale}/diagnostic`;
+  const contactHref = `#${messages.contact.id}`;
   return (
     <section
       id="inicio"
@@ -63,7 +63,7 @@ export function Hero({ messages }: { messages: SiteMessages }) {
           <Reveal delay={0.18}>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
-                href={diagnosticHref}
+                href={contactHref}
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-aurora-blue/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-aurora-purple/25"
               >
                 {hero.ctaPrimary}

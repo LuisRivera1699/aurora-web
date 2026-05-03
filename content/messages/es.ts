@@ -15,9 +15,7 @@ export const messagesEs: SiteMessages = {
   navLinks: [
     { href: "/es/about", label: "Nosotros" },
     { href: "#servicios", label: "Servicios" },
-    { href: "#portafolio", label: "Portafolio" },
     { href: "/es/blog", label: "Blog" },
-    { href: "/es/diagnostic", label: "Diagnóstico IA" },
     { href: "#contacto", label: "Contacto" },
   ],
   socialLinks: [
@@ -44,7 +42,7 @@ export const messagesEs: SiteMessages = {
     headline: "Construimos software y automatizamos procesos para empresas que necesitan ejecutar rápido.",
     subline:
       "Diseñamos, desarrollamos y llevamos a producción sistemas empresariales en semanas, no meses, combinando ingeniería senior con inteligencia artificial aplicada donde realmente aporta valor.",
-    ctaPrimary: "Solicitar diagnóstico",
+    ctaPrimary: "Hablar con Aurora",
     ctaSecondary: "Ver cómo trabajamos",
     backgroundImage: {
       src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2400&q=80",
