@@ -11,6 +11,7 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,6 +32,9 @@ export default function AdminLoginPage() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setIsFormValid(e.currentTarget.checkValidity());
+    if (!e.currentTarget.checkValidity()) return;
+
     if (!isFirebaseConfigured()) {
       setError("Firebase no está configurado (.env).");
       return;
@@ -96,6 +100,8 @@ export default function AdminLoginPage() {
 
         <form
           onSubmit={onSubmit}
+          onInput={(e) => setIsFormValid(e.currentTarget.checkValidity())}
+          onChange={(e) => setIsFormValid(e.currentTarget.checkValidity())}
           className="gradient-border-mask space-y-4 rounded-2xl bg-surface-card p-6 shadow-xl"
         >
           <div>
@@ -131,7 +137,7 @@ export default function AdminLoginPage() {
           )}
           <button
             type="submit"
-            disabled={busy || !isFirebaseConfigured()}
+            disabled={busy || !isFirebaseConfigured() || !isFormValid}
             className="w-full rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue py-3.5 text-sm font-semibold text-white disabled:opacity-50"
           >
             {busy ? "Entrando…" : "Entrar"}

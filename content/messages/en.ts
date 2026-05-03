@@ -262,7 +262,7 @@ export const messagesEn: SiteMessages = {
     errorFirebase:
       "Form unavailable: configure Firebase in .env (NEXT_PUBLIC_FIREBASE_*).",
     errorPermission:
-      "Not authorized. Check Firestore rules for this collection.",
+      "Error sending form. Try again and if it persists, contact us at contacto@teamaurora.pe.",
     errorGeneric: "Could not send. Please try again.",
   },
   footer: {

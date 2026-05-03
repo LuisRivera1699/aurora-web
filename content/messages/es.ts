@@ -262,7 +262,7 @@ export const messagesEs: SiteMessages = {
     errorFirebase:
       "Formulario no disponible: configura Firebase en .env (NEXT_PUBLIC_FIREBASE_*).",
     errorPermission:
-      "No autorizado. Revisa las reglas de Firestore para esta colección.",
+      "Error al enviar formulario. Inténtalo de nuevo y si persiste comunícate con nosotros al correo contacto@teamaurora.pe.",
     errorGeneric: "No se pudo enviar. Intenta de nuevo.",
   },
   footer: {

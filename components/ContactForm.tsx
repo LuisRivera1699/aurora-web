@@ -1,12 +1,14 @@
 "use client";
 
 import { FirebaseError } from "firebase/app";
-import { useEffect, useMemo, useReducer, useRef } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { Reveal } from "@/components/Reveal";
 import { useSiteMessages } from "@/components/SiteMessagesProvider";
 import { SectionTitle } from "@/components/SectionTitle";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { submitContactLead } from "@/lib/submit-contact-lead";
+
+const CONTACT_EMAIL = "contacto@teamaurora.pe";
 
 type State = {
   status: "idle" | "loading" | "success" | "error";
@@ -34,6 +36,32 @@ function formReducer(state: State, action: Action): State {
   }
 }
 
+function ContactErrorMessage({ message }: { message: string }) {
+  const [beforeEmail, afterEmail] = message.split(CONTACT_EMAIL);
+
+  if (afterEmail === undefined) return <>{message}</>;
+
+  return (
+    <>
+      {beforeEmail}
+      <a className="font-semibold underline underline-offset-2" href={`mailto:${CONTACT_EMAIL}`}>
+        {CONTACT_EMAIL}
+      </a>
+      {afterEmail}
+    </>
+  );
+}
+
+function getContactFormValidity(form: HTMLFormElement | null) {
+  if (!form) return false;
+
+  const fd = new FormData(form);
+  const name = String(fd.get("name") ?? "").trim();
+  const message = String(fd.get("message") ?? "").trim();
+
+  return form.checkValidity() && name.length >= 2 && message.length >= 1;
+}
+
 type ContactFormProps = {
   title?: string;
   description?: string;
@@ -52,34 +80,48 @@ export function ContactForm({
   messagePlaceholder,
 }: ContactFormProps = {}) {
   const { contact, contactForm } = useSiteMessages();
+  const formRef = useRef<HTMLFormElement>(null);
   const serviceSelectRef = useRef<HTMLSelectElement>(null);
   const [state, dispatch] = useReducer(formReducer, {
     status: "idle",
     message: "",
   });
+  const [isFormValid, setIsFormValid] = useState(false);
   const serviceValues = useMemo(
     () => new Set(contact.requirementTypes.map((opt) => opt.value).filter(Boolean)),
     [contact.requirementTypes],
   );
+
+  const updateFormValidity = useCallback((form: HTMLFormElement | null = formRef.current) => {
+    setIsFormValid(getContactFormValidity(form));
+  }, []);
 
   useEffect(() => {
     if (requirementTypeValue) {
       if (serviceSelectRef.current) {
         serviceSelectRef.current.value = requirementTypeValue;
       }
+      updateFormValidity();
       return;
     }
     const requestedService = new URLSearchParams(window.location.search).get("service");
-    if (!requestedService || !serviceValues.has(requestedService)) return;
+    if (!requestedService || !serviceValues.has(requestedService)) {
+      updateFormValidity();
+      return;
+    }
     if (serviceSelectRef.current) {
       serviceSelectRef.current.value = requestedService;
     }
-  }, [requirementTypeValue, serviceValues]);
+    updateFormValidity();
+  }, [requirementTypeValue, serviceValues, updateFormValidity]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    dispatch({ type: "start" });
     const form = e.currentTarget;
+    updateFormValidity(form);
+    if (!getContactFormValidity(form)) return;
+
+    dispatch({ type: "start" });
     const fd = new FormData(form);
 
     const name = String(fd.get("name") ?? "").trim();
@@ -108,6 +150,7 @@ export function ContactForm({
       });
       dispatch({ type: "success" });
       form.reset();
+      updateFormValidity(form);
     } catch (err) {
       if (err instanceof FirebaseError && err.code === "permission-denied") {
         dispatch({
@@ -146,7 +189,10 @@ export function ContactForm({
 
           <Reveal delay={0.08}>
             <form
+              ref={formRef}
               onSubmit={handleSubmit}
+              onInput={(e) => updateFormValidity(e.currentTarget)}
+              onChange={(e) => updateFormValidity(e.currentTarget)}
               className="gradient-border-mask relative space-y-5 rounded-3xl bg-surface-card p-6 shadow-xl md:p-8"
               noValidate
             >
@@ -239,7 +285,7 @@ export function ContactForm({
                     id="message"
                     name="message"
                     required
-                    minLength={10}
+                    minLength={1}
                     rows={5}
                     className="w-full resize-y rounded-xl border border-white/10 bg-surface-900/80 px-4 py-3 text-foreground placeholder:text-foreground-muted/50 outline-none transition-[box-shadow,border-color] focus:border-aurora-blue/60 focus:ring-2 focus:ring-aurora-blue/25"
                     placeholder={messageFieldPlaceholder}
@@ -254,13 +300,13 @@ export function ContactForm({
               )}
               {state.status === "error" && (
                 <p className="rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-200" role="alert">
-                  {state.message}
+                  <ContactErrorMessage message={state.message} />
                 </p>
               )}
 
               <button
                 type="submit"
-                disabled={state.status === "loading"}
+                disabled={state.status === "loading" || !isFormValid}
                 className="w-full rounded-full bg-gradient-to-r from-aurora-purple to-aurora-blue py-4 text-base font-semibold text-white shadow-lg transition-[transform,opacity] enabled:hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:px-12"
               >
                 {state.status === "loading" ? contactForm.sending : contactForm.submit}

@@ -9,12 +9,12 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import AdminShell from "@/components/AdminShell";
 import type { ContactLeadRecord } from "@/lib/contact-lead-types";
 import { getFirestoreDb, getLeadsCollectionName, isFirebaseConfigured } from "@/lib/firebase";
-import { signOutAdmin, watchAuthState } from "@/lib/firebase-auth";
+import { watchAuthState } from "@/lib/firebase-auth";
 
 const SERVICE_INTEREST_LABELS: Record<string, string> = {
   "process-automation": "Automatización de procesos",
@@ -41,6 +41,101 @@ function formatServiceInterest(value: string): string {
   return SERVICE_INTEREST_LABELS[value] ?? value;
 }
 
+function LeadDetailField({
+  label,
+  value,
+  href,
+}: {
+  label: string;
+  value?: string;
+  href?: string;
+}) {
+  const display = value?.trim() || "—";
+  return (
+    <div>
+      <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground-muted">
+        {label}
+      </dt>
+      <dd className="mt-1 break-words text-sm leading-relaxed text-foreground">
+        {href && display !== "—" ? (
+          <a
+            href={href}
+            className="text-aurora-blue hover:underline"
+            target={href.startsWith("http") ? "_blank" : undefined}
+            rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+          >
+            {display}
+          </a>
+        ) : (
+          display
+        )}
+      </dd>
+    </div>
+  );
+}
+
+function LeadDetailModal({
+  lead,
+  onClose,
+}: {
+  lead: ContactLeadRecord;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lead-detail-title"
+    >
+      <div className="max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-white/10 bg-surface-900 shadow-2xl shadow-black/40">
+        <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-white/10 bg-surface-900/95 px-5 py-4 backdrop-blur">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-aurora-blue">
+              Lead
+            </p>
+            <h2 id="lead-detail-title" className="mt-1 font-display text-xl font-bold">
+              {lead.name || "Detalle del lead"}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-white/15 px-3 py-1.5 text-sm text-foreground-muted hover:bg-white/5 hover:text-foreground"
+          >
+            Cerrar
+          </button>
+        </div>
+
+        <div className="space-y-6 p-5">
+          <dl className="grid gap-4 sm:grid-cols-2">
+            <LeadDetailField label="Fecha" value={lead.createdAt ? new Date(lead.createdAt).toLocaleString("es") : ""} />
+            <LeadDetailField label="Nombre" value={lead.name} />
+            <LeadDetailField label="Email" value={lead.email} href={lead.email ? `mailto:${lead.email}` : undefined} />
+            <LeadDetailField label="Empresa" value={lead.company} />
+            <LeadDetailField label="Teléfono" value={lead.phone} href={lead.phone ? `tel:${lead.phone}` : undefined} />
+            <LeadDetailField
+              label="Servicio"
+              value={lead.requirementType ? formatServiceInterest(lead.requirementType) : ""}
+            />
+            <LeadDetailField label="Origen" value={lead.source} />
+            <LeadDetailField label="User agent" value={lead.userAgent} />
+          </dl>
+
+          <section className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground-muted">
+              Mensaje
+            </h3>
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+              {lead.message || "—"}
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
@@ -49,6 +144,7 @@ export default function AdminDashboardPage() {
   const [loadState, setLoadState] = useState<"idle" | "loading" | "error">("idle");
   const [loadError, setLoadError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedLead, setSelectedLead] = useState<ContactLeadRecord | null>(null);
 
   const fetchLeads = useCallback(async () => {
     if (!isFirebaseConfigured()) {
@@ -68,6 +164,10 @@ export default function AdminDashboardPage() {
         rows.push(mapDoc(d.id, d.data() as Record<string, unknown>));
       });
       setLeads(rows);
+      setSelectedLead((current) => {
+        if (!current) return null;
+        return rows.find((row) => row.id === current.id) ?? null;
+      });
       setLoadState("idle");
     } catch (e) {
       setLoadState("error");
@@ -102,6 +202,15 @@ export default function AdminDashboardPage() {
     void fetchLeads();
   }, [authChecked, userEmail, fetchLeads]);
 
+  useEffect(() => {
+    if (!selectedLead) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setSelectedLead(null);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedLead]);
+
   async function onDelete(id: string) {
     if (!confirm("¿Eliminar este lead de forma permanente?")) return;
     setDeletingId(id);
@@ -110,6 +219,7 @@ export default function AdminDashboardPage() {
       const db = getFirestoreDb();
       await deleteDoc(doc(db, getLeadsCollectionName(), id));
       setLeads((prev) => prev.filter((r) => r.id !== id));
+      setSelectedLead((current) => (current?.id === id ? null : current));
     } catch (e) {
       if (e instanceof FirebaseError && e.code === "permission-denied") {
         setLoadError("Sin permiso para eliminar. Revisa firestore.rules.");
@@ -118,15 +228,6 @@ export default function AdminDashboardPage() {
       setLoadError(e instanceof Error ? e.message : "No se pudo eliminar.");
     } finally {
       setDeletingId(null);
-    }
-  }
-
-  async function onSignOut() {
-    try {
-      await signOutAdmin();
-      router.replace("/admin/login");
-    } catch {
-      setLoadError("No se pudo cerrar sesión.");
     }
   }
 
@@ -139,54 +240,20 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-[100svh] bg-surface-900 text-foreground">
-      <header className="border-b border-white/10 bg-surface-900/90 px-4 py-4 backdrop-blur sm:px-6">
-        <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="font-display text-xl font-bold">Leads</h1>
-            <p className="text-xs text-foreground-muted">
-              {userEmail ? (
-                <>
-                  Sesión: <span className="text-foreground/90">{userEmail}</span>
-                </>
-              ) : (
-                "—"
-              )}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => void fetchLeads()}
-              disabled={loadState === "loading"}
-              className="rounded-full border border-white/20 px-4 py-2 text-sm hover:bg-white/5 disabled:opacity-50"
-            >
-              Actualizar
-            </button>
-            <button
-              type="button"
-              onClick={() => void onSignOut()}
-              className="rounded-full bg-white/10 px-4 py-2 text-sm hover:bg-white/15"
-            >
-              Cerrar sesión
-            </button>
-            <Link
-              href="/admin/diagnostics"
-              className="rounded-full border border-aurora-blue/40 px-4 py-2 text-sm text-aurora-blue hover:bg-aurora-blue/10"
-            >
-              Diagnósticos IA
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-sm hover:bg-white/5"
-            >
-              Sitio público
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <AdminShell
+      title="Leads"
+      userEmail={userEmail}
+      actions={
+        <button
+          type="button"
+          onClick={() => void fetchLeads()}
+          disabled={loadState === "loading"}
+          className="rounded-full border border-white/20 px-4 py-2 text-sm hover:bg-white/5 disabled:opacity-50"
+        >
+          Actualizar
+        </button>
+      }
+    >
         {!isFirebaseConfigured() && (
           <p className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
             Configura <code className="rounded bg-white/10 px-1">NEXT_PUBLIC_FIREBASE_*</code> en{" "}
@@ -208,53 +275,77 @@ export default function AdminDashboardPage() {
           <p className="text-foreground-muted">No hay leads todavía.</p>
         )}
 
-        <ul className="space-y-4">
-          {leads.map((lead) => (
-            <li
-              key={lead.id}
-              className="gradient-border-mask rounded-2xl border border-white/5 bg-surface-card p-5 shadow-lg"
-            >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="space-y-1 text-sm">
-                  <p className="font-display text-lg font-semibold text-foreground">{lead.name}</p>
-                  <p>
-                    <a href={`mailto:${lead.email}`} className="text-aurora-blue hover:underline">
-                      {lead.email}
-                    </a>
-                  </p>
-                  <p className="text-xs text-foreground-muted">
-                    {lead.createdAt ? new Date(lead.createdAt).toLocaleString("es") : "—"}
-                  </p>
-                  {lead.requirementType ? (
-                    <p className="text-xs font-medium text-aurora-blue/90">
-                      Servicio de interés: {formatServiceInterest(lead.requirementType)}
-                    </p>
-                  ) : null}
-                  {(lead.company || lead.phone) && (
-                    <p className="text-xs text-foreground-muted">
-                      {[lead.company, lead.phone].filter(Boolean).join(" · ")}
-                    </p>
-                  )}
-                  <p className="mt-3 whitespace-pre-wrap text-foreground-muted">{lead.message}</p>
-                  {lead.userAgent ? (
-                    <p className="mt-2 truncate text-[10px] text-foreground-muted/70" title={lead.userAgent}>
-                      {lead.userAgent}
-                    </p>
-                  ) : null}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => void onDelete(lead.id)}
-                  disabled={deletingId === lead.id}
-                  className="shrink-0 rounded-full border border-red-400/40 px-4 py-2 text-sm text-red-200 hover:bg-red-500/10 disabled:opacity-50"
-                >
-                  {deletingId === lead.id ? "Eliminando…" : "Eliminar"}
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </main>
-    </div>
+        {leads.length > 0 && (
+          <div className="overflow-x-auto rounded-2xl border border-white/10 bg-surface-card/70 shadow-2xl shadow-black/20">
+            <table className="w-full min-w-[1200px] table-fixed text-left text-sm">
+              <thead className="border-b border-white/10 bg-white/[0.04] text-xs uppercase tracking-[0.18em] text-foreground-muted">
+                <tr>
+                  <th className="w-44 px-4 py-4 font-semibold">Fecha</th>
+                  <th className="w-40 px-4 py-4 font-semibold">Nombre</th>
+                  <th className="w-56 px-4 py-4 font-semibold">Email</th>
+                  <th className="w-40 px-4 py-4 font-semibold">Empresa</th>
+                  <th className="w-36 px-4 py-4 font-semibold">Teléfono</th>
+                  <th className="w-56 px-4 py-4 font-semibold">Servicio</th>
+                  <th className="w-72 px-4 py-4 font-semibold">Mensaje</th>
+                  <th className="w-56 px-4 py-4 font-semibold" />
+                </tr>
+              </thead>
+              <tbody>
+                {leads.map((lead) => (
+                  <tr key={lead.id} className="border-b border-white/5 align-top hover:bg-white/[0.03]">
+                    <td className="whitespace-nowrap px-4 py-4 text-foreground-muted">
+                      {lead.createdAt ? new Date(lead.createdAt).toLocaleString("es") : "—"}
+                    </td>
+                    <td className="px-4 py-4 font-medium">{lead.name || "—"}</td>
+                    <td className="px-4 py-4">
+                      {lead.email ? (
+                        <a href={`mailto:${lead.email}`} className="text-aurora-blue hover:underline">
+                          {lead.email}
+                        </a>
+                      ) : (
+                        <span className="text-foreground-muted">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-4 text-foreground-muted">{lead.company || "—"}</td>
+                    <td className="whitespace-nowrap px-4 py-4 text-foreground-muted">
+                      {lead.phone || "—"}
+                    </td>
+                    <td className="px-4 py-4 text-foreground-muted">
+                      {lead.requirementType ? formatServiceInterest(lead.requirementType) : "—"}
+                    </td>
+                    <td className="px-4 py-4 text-foreground-muted">
+                      <p className="truncate" title={lead.message}>
+                        {lead.message || "—"}
+                      </p>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex justify-end gap-2 whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedLead(lead)}
+                          className="rounded-full border border-white/20 px-4 py-2 text-sm text-foreground hover:bg-white/5"
+                        >
+                          Ver detalle
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => void onDelete(lead.id)}
+                          disabled={deletingId === lead.id}
+                          className="rounded-full border border-red-400/40 px-4 py-2 text-sm text-red-200 hover:bg-red-500/10 disabled:opacity-50"
+                        >
+                          {deletingId === lead.id ? "Eliminando…" : "Eliminar"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {selectedLead ? (
+          <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />
+        ) : null}
+    </AdminShell>
   );
 }

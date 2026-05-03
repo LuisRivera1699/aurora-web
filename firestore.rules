@@ -34,7 +34,7 @@ service cloud.firestore {
         && request.resource.data.email.size() >= 5
         && request.resource.data.email.size() <= 320
         && request.resource.data.message is string
-        && request.resource.data.message.size() >= 10
+        && request.resource.data.message.size() >= 1
         && request.resource.data.message.size() <= 8000
         && request.resource.data.company is string
         && request.resource.data.company.size() <= 200

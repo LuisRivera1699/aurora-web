@@ -5,8 +5,9 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import AdminShell from "@/components/AdminShell";
 import { getDiagnosticsCollectionName, getFirestoreDb, isFirebaseConfigured } from "@/lib/firebase";
-import { signOutAdmin, watchAuthState } from "@/lib/firebase-auth";
+import { watchAuthState } from "@/lib/firebase-auth";
 
 type DiagnosticRow = {
   id: string;
@@ -121,15 +122,6 @@ export default function AdminDiagnosticsPage() {
     return () => clearTimeout(t);
   }, [authChecked, userEmail, fetchRows]);
 
-  async function onSignOut() {
-    try {
-      await signOutAdmin();
-      router.replace("/admin/login");
-    } catch {
-      setLoadError("No se pudo cerrar sesión.");
-    }
-  }
-
   if (!authChecked) {
     return (
       <div className="flex min-h-[100svh] items-center justify-center bg-surface-900 text-foreground-muted">
@@ -139,8 +131,7 @@ export default function AdminDiagnosticsPage() {
   }
 
   const labels = {
-    title: "Diagnósticos IA",
-    navBack: "← Volver al panel",
+    title: "Diagnóstico",
     empty: "No hay diagnósticos todavía.",
     cols: {
       name: "Nombre",
@@ -154,54 +145,20 @@ export default function AdminDiagnosticsPage() {
   };
 
   return (
-    <div className="min-h-[100svh] bg-surface-900 text-foreground">
-      <header className="border-b border-white/10 bg-surface-900/90 px-4 py-4 backdrop-blur sm:px-6">
-        <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="font-display text-xl font-bold">{labels.title}</h1>
-            <p className="text-xs text-foreground-muted">
-              {userEmail ? (
-                <>
-                  Sesión: <span className="text-foreground/90">{userEmail}</span>
-                </>
-              ) : (
-                "—"
-              )}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href="/admin"
-              className="rounded-full border border-white/20 px-4 py-2 text-sm hover:bg-white/5"
-            >
-              {labels.navBack}
-            </Link>
-            <button
-              type="button"
-              onClick={() => void fetchRows()}
-              disabled={loadState === "loading"}
-              className="rounded-full border border-white/20 px-4 py-2 text-sm hover:bg-white/5 disabled:opacity-50"
-            >
-              Actualizar
-            </button>
-            <button
-              type="button"
-              onClick={() => void onSignOut()}
-              className="rounded-full bg-white/10 px-4 py-2 text-sm hover:bg-white/15"
-            >
-              Cerrar sesión
-            </button>
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 px-4 py-2 text-sm hover:bg-white/5"
-            >
-              Sitio público
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <AdminShell
+      title={labels.title}
+      userEmail={userEmail}
+      actions={
+        <button
+          type="button"
+          onClick={() => void fetchRows()}
+          disabled={loadState === "loading"}
+          className="rounded-full border border-white/20 px-4 py-2 text-sm hover:bg-white/5 disabled:opacity-50"
+        >
+          Actualizar
+        </button>
+      }
+    >
         {loadError && (
           <p className="mb-6 rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-200" role="alert">
             {loadError}
@@ -216,25 +173,26 @@ export default function AdminDiagnosticsPage() {
           <p className="text-foreground-muted">{labels.empty}</p>
         )}
 
-        <div className="overflow-x-auto rounded-2xl border border-white/10">
+        {rows.length > 0 && (
+        <div className="overflow-x-auto rounded-2xl border border-white/10 bg-surface-card/70 shadow-2xl shadow-black/20">
           <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="border-b border-white/10 bg-white/[0.03] text-foreground-muted">
+            <thead className="border-b border-white/10 bg-white/[0.04] text-xs uppercase tracking-[0.18em] text-foreground-muted">
               <tr>
-                <th className="px-4 py-3 font-medium">{labels.cols.name}</th>
-                <th className="px-4 py-3 font-medium">{labels.cols.company}</th>
-                <th className="px-4 py-3 font-medium">{labels.cols.web}</th>
-                <th className="px-4 py-3 font-medium">{labels.cols.type}</th>
-                <th className="px-4 py-3 font-medium">{labels.cols.opportunity}</th>
-                <th className="px-4 py-3 font-medium">{labels.cols.date}</th>
-                <th className="px-4 py-3 font-medium" />
+                <th className="px-4 py-4 font-semibold">{labels.cols.name}</th>
+                <th className="px-4 py-4 font-semibold">{labels.cols.company}</th>
+                <th className="px-4 py-4 font-semibold">{labels.cols.web}</th>
+                <th className="px-4 py-4 font-semibold">{labels.cols.type}</th>
+                <th className="px-4 py-4 font-semibold">{labels.cols.opportunity}</th>
+                <th className="px-4 py-4 font-semibold">{labels.cols.date}</th>
+                <th className="px-4 py-4 font-semibold" />
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id} className="border-b border-white/5 hover:bg-white/[0.02]">
-                  <td className="px-4 py-3 font-medium">{row.name}</td>
-                  <td className="px-4 py-3 text-foreground-muted">{row.company || "—"}</td>
-                  <td className="px-4 py-3 text-foreground-muted">
+                  <td className="px-4 py-4 font-medium">{row.name}</td>
+                  <td className="px-4 py-4 text-foreground-muted">{row.company || "—"}</td>
+                  <td className="px-4 py-4 text-foreground-muted">
                     {row.webUrl ? (
                       <a
                         href={webUrlHref(row.webUrl)}
@@ -248,12 +206,12 @@ export default function AdminDiagnosticsPage() {
                       "—"
                     )}
                   </td>
-                  <td className="px-4 py-3 text-foreground-muted">{row.userType || "—"}</td>
-                  <td className="px-4 py-3 text-foreground-muted">{row.opportunity || "—"}</td>
-                  <td className="px-4 py-3 text-foreground-muted">
+                  <td className="px-4 py-4 text-foreground-muted">{row.userType || "—"}</td>
+                  <td className="px-4 py-4 text-foreground-muted">{row.opportunity || "—"}</td>
+                  <td className="px-4 py-4 text-foreground-muted">
                     {row.createdAt ? row.createdAt.toLocaleString("es") : "—"}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-4">
                     <Link
                       href={`/admin/diagnostics/${row.id}`}
                       className="text-aurora-blue hover:underline"
@@ -266,7 +224,7 @@ export default function AdminDiagnosticsPage() {
             </tbody>
           </table>
         </div>
-      </main>
-    </div>
+        )}
+    </AdminShell>
   );
 }
