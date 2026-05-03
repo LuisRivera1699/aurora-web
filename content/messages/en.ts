@@ -319,9 +319,9 @@ export const messagesEn: SiteMessages = {
   },
   diagnostic: {
     navLabel: "AI diagnostic",
-    pageTitle: "AI-powered diagnostic",
+    pageTitle: "Smart diagnostic for your business",
     pageSubtitle:
-      "Tell us about your context in a few minutes. We analyze what you share with assisted intelligence and professional judgment, and you get an orientative diagnostic—clear, structured, and with concrete next steps.",
+      "Tell us how your operation works today and we will return a clear diagnostic with opportunities for automation, development, or process improvement, along with concrete next steps.",
     progress: "Step {current} of {total}",
     back: "Back",
     next: "Next",

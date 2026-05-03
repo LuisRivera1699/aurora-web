@@ -319,9 +319,9 @@ export const messagesEs: SiteMessages = {
   },
   diagnostic: {
     navLabel: "Diagnóstico IA",
-    pageTitle: "Diagnóstico inteligente",
+    pageTitle: "Diagnóstico inteligente para tu negocio",
     pageSubtitle:
-      "Cuéntanos tu contexto en unos minutos. Analizamos lo que compartes con inteligencia asistida y criterio profesional, y te devolvemos un diagnóstico orientativo: claro, estructurado y con próximos pasos.",
+      "Cuéntanos cómo funciona tu operación hoy y te devolvemos un diagnóstico claro con oportunidades de automatización, desarrollo o mejora de procesos, junto con próximos pasos concretos.",
     progress: "Paso {current} de {total}",
     back: "Atrás",
     next: "Siguiente",
