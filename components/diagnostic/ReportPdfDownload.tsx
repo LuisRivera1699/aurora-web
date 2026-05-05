@@ -3,6 +3,7 @@
 import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, StandardFonts, type PDFFont, type PDFImage } from "pdf-lib";
 import type { SiteMessages } from "@/content/messages/types";
+import { DIAGNOSTIC_SCHEDULE_URL } from "@/lib/diagnostic-schedule-url";
 import { getReportClientDisplayName } from "@/lib/diagnostics/report-client-line";
 import type { DiagnosticReportPayload, PrimaryRecommendation } from "@/lib/diagnostics/types";
 import { addUriLink } from "./pdf-links";
@@ -30,7 +31,7 @@ function primaryLabel(m: SiteMessages, key: PrimaryRecommendation | undefined): 
 }
 
 function resolvePdfCtaUrl(scheduleHref: string | undefined): string {
-  const explicit = process.env.NEXT_PUBLIC_REPORT_PDF_CTA_URL?.trim();
+  const explicit = process.env.NEXT_PUBLIC_DIAGNOSTIC_SCHEDULE_URL?.trim();
   if (explicit) {
     if (explicit.startsWith("http://") || explicit.startsWith("https://")) return explicit;
     try {
@@ -41,6 +42,9 @@ function resolvePdfCtaUrl(scheduleHref: string | undefined): string {
   }
   const href = scheduleHref?.trim() ?? "";
   if (href.startsWith("http://") || href.startsWith("https://")) return href;
+  const legacyExplicit = process.env.NEXT_PUBLIC_REPORT_PDF_CTA_URL?.trim();
+  if (!href && legacyExplicit) return legacyExplicit;
+  if (!href) return DIAGNOSTIC_SCHEDULE_URL;
   try {
     return new URL(href || "/", window.location.origin).href;
   } catch {

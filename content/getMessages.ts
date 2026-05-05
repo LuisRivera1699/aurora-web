@@ -1,6 +1,7 @@
 import type { SiteMessages } from "@/content/messages/types";
 import { messagesEn } from "@/content/messages/en";
 import { messagesEs } from "@/content/messages/es";
+import { DIAGNOSTIC_SCHEDULE_URL } from "@/lib/diagnostic-schedule-url";
 
 export const locales = ["es", "en"] as const;
 export type Locale = (typeof locales)[number];
@@ -15,7 +16,9 @@ export function getMessages(locale: string): SiteMessages {
     ...base,
     report: {
       ...base.report,
-      scheduleUrl: process.env.NEXT_PUBLIC_SCHEDULE_URL ?? "",
+      scheduleUrl:
+        process.env.NEXT_PUBLIC_DIAGNOSTIC_SCHEDULE_URL ??
+        DIAGNOSTIC_SCHEDULE_URL,
     },
   };
 }
