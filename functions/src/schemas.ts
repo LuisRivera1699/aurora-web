@@ -129,6 +129,26 @@ export const profilerInputSchema = z.object({
   userAgent: z.string().max(512).optional(),
 });
 
+export const contactLeadInputSchema = z.object({
+  name: z.string().min(2).max(200),
+  email: z.string().email().max(320),
+  message: z.string().min(1).max(8000),
+  company: z.preprocess(
+    (v) => (v === null || v === undefined ? "" : v),
+    z.string().max(200).default(""),
+  ),
+  phone: z.preprocess(
+    (v) => (v === null || v === undefined ? "" : v),
+    z.string().max(80).default(""),
+  ),
+  requirementType: z.preprocess(
+    (v) => (v === null || v === undefined ? "" : v),
+    z.string().max(64).default(""),
+  ),
+  uiLocale: z.enum(["es", "en"]),
+  userAgent: z.string().max(512).optional(),
+});
+
 export const primaryRecommendationSchema = z.enum([
   "automate",
   "validate_first",
@@ -169,4 +189,5 @@ export const aiBundleSchema = z.object({
 });
 
 export type ProfilerInput = z.infer<typeof profilerInputSchema>;
+export type ContactLeadInput = z.infer<typeof contactLeadInputSchema>;
 export type AiBundle = z.infer<typeof aiBundleSchema>;

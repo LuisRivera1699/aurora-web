@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.aiBundleSchema = exports.diagnosisSchema = exports.classificationSchema = exports.primaryRecommendationSchema = exports.profilerInputSchema = exports.profilerAnswersSchema = exports.profilerAnswersLegacySchema = exports.profilerAnswersV2Schema = void 0;
+exports.aiBundleSchema = exports.diagnosisSchema = exports.classificationSchema = exports.primaryRecommendationSchema = exports.contactLeadInputSchema = exports.profilerInputSchema = exports.profilerAnswersSchema = exports.profilerAnswersLegacySchema = exports.profilerAnswersV2Schema = void 0;
 const zod_1 = require("zod");
 const urgency = zod_1.z.enum(["high", "medium", "low"]);
 const text = (min) => zod_1.z.string().min(min).max(4000);
@@ -109,6 +109,16 @@ exports.profilerInputSchema = zod_1.z.object({
         phone: zod_1.z.preprocess((v) => (v === null || v === undefined ? "" : v), zod_1.z.string().max(80).default("")),
         webUrl: zod_1.z.preprocess((v) => (v === null || v === undefined ? "" : v), zod_1.z.string().max(500).default("")),
     }),
+    uiLocale: zod_1.z.enum(["es", "en"]),
+    userAgent: zod_1.z.string().max(512).optional(),
+});
+exports.contactLeadInputSchema = zod_1.z.object({
+    name: zod_1.z.string().min(2).max(200),
+    email: zod_1.z.string().email().max(320),
+    message: zod_1.z.string().min(1).max(8000),
+    company: zod_1.z.preprocess((v) => (v === null || v === undefined ? "" : v), zod_1.z.string().max(200).default("")),
+    phone: zod_1.z.preprocess((v) => (v === null || v === undefined ? "" : v), zod_1.z.string().max(80).default("")),
+    requirementType: zod_1.z.preprocess((v) => (v === null || v === undefined ? "" : v), zod_1.z.string().max(64).default("")),
     uiLocale: zod_1.z.enum(["es", "en"]),
     userAgent: zod_1.z.string().max(512).optional(),
 });

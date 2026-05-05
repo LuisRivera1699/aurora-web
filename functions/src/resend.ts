@@ -148,10 +148,110 @@ export async function sendDiagnosticEmail(opts: {
   });
 }
 
+export async function sendContactThankYouEmail(opts: {
+  to: string;
+  name: string;
+  language: "es" | "en";
+}): Promise<void> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    console.warn("RESEND_API_KEY missing; skipping email");
+    return;
+  }
+
+  const resend = new Resend(key);
+  const from = process.env.RESEND_FROM ?? "contacto@teamaurora.pe";
+  const siteUrl = (process.env.SITE_URL ?? "https://www.teamaurora.pe").replace(
+    /\/$/,
+    "",
+  );
+  const logoUrl =
+    process.env.EMAIL_LOGO_URL ?? `${siteUrl}/brand_assets/LOGO_WHITE.svg`;
+  const meetingUrl =
+    process.env.CONTACT_MEETING_URL ??
+    "https://cal.com/aurora-software-factory/15min-contact";
+
+  const subject =
+    opts.language === "es"
+      ? "Recibimos tu solicitud — siguiente paso"
+      : "We received your request — next step";
+
+  await resend.emails.send({
+    from,
+    to: opts.to,
+    subject,
+    html:
+      opts.language === "es"
+        ? buildContactThankYouHtml({
+            lang: "es",
+            preheader:
+              "Gracias por escribirnos. Agenda una llamada corta para avanzar rápido.",
+            headline: "Recibimos tu solicitud",
+            greeting: `Hola ${escapeHtml(opts.name)},`,
+            intro:
+              "Gracias por escribirnos 🙌 Ya tenemos tu solicitud y hay varias formas en las que podríamos ayudarte según lo que comentas.",
+            leadIn:
+              "Para avanzar rápido, lo mejor es agendar una llamada corta donde:",
+            bulletItems: [
+              "Entendemos bien tu caso",
+              "Te damos recomendaciones concretas",
+              "Vemos si tiene sentido trabajar juntos",
+            ],
+            ctaIntro: "Puedes elegir el horario que mejor te funcione aquí:",
+            cta: "Agendar llamada corta",
+            meetingUrl: escapeHtml(meetingUrl),
+            plainMeetingUrl: escapeHtml(meetingUrl),
+            fallbackLinkLabel:
+              "Si el botón no funciona, copia y pega este enlace en el navegador:",
+            afterCta:
+              "La llamada es directa, sin compromiso, y sales con más claridad sobre qué hacer.",
+            replyLine:
+              "Si prefieres, también puedes responder este correo con más contexto y lo revisamos antes de la reunión.",
+            signature: "Quedo atento,<br/>Luis Rivera<br/>Aurora Managing Director",
+            logoUrl: escapeHtml(logoUrl),
+            footer: buildFooter(siteUrl),
+          })
+        : buildContactThankYouHtml({
+            lang: "en",
+            preheader:
+              "Thanks for reaching out. Book a short call so we can move quickly.",
+            headline: "We received your request",
+            greeting: `Hi ${escapeHtml(opts.name)},`,
+            intro:
+              "Thanks for reaching out 🙌 We have your request, and there are several ways we could help depending on what you shared.",
+            leadIn:
+              "To move quickly, the best next step is to book a short call where:",
+            bulletItems: [
+              "We understand your case clearly",
+              "We give you concrete recommendations",
+              "We see whether it makes sense to work together",
+            ],
+            ctaIntro: "You can choose the time that works best for you here:",
+            cta: "Book a short call",
+            meetingUrl: escapeHtml(meetingUrl),
+            plainMeetingUrl: escapeHtml(meetingUrl),
+            fallbackLinkLabel:
+              "If the button does not work, copy and paste this link into your browser:",
+            afterCta:
+              "The call is direct, there is no commitment, and you leave with more clarity on what to do.",
+            replyLine:
+              "If you prefer, you can also reply to this email with more context and we will review it before the meeting.",
+            signature:
+              "Best,<br/>Luis Rivera<br/>Aurora Managing Director",
+            logoUrl: escapeHtml(logoUrl),
+            footer: buildFooter(siteUrl),
+          }),
+  });
+}
+
 function truncatePlain(s: string, max: number): string {
   const t = s.trim();
   if (t.length <= max) return t;
   return `${t.slice(0, max).trim()}…`;
+}
+
+function buildFooter(siteUrl: string): string {
+  return `© Aurora · <a href="${escapeHtml(siteUrl)}" style="color:#7a8a99;text-decoration:none;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a>`;
 }
 
 function primaryRecommendationLabel(
@@ -207,6 +307,26 @@ type BuildParams = {
   fallbackLinkLabel: string;
   reportUrl: string;
   plainReportUrl: string;
+  logoUrl: string;
+  footer: string;
+};
+
+type ContactThankYouParams = {
+  lang: string;
+  preheader: string;
+  headline: string;
+  greeting: string;
+  intro: string;
+  leadIn: string;
+  bulletItems: string[];
+  ctaIntro: string;
+  cta: string;
+  meetingUrl: string;
+  plainMeetingUrl: string;
+  fallbackLinkLabel: string;
+  afterCta: string;
+  replyLine: string;
+  signature: string;
   logoUrl: string;
   footer: string;
 };
@@ -280,6 +400,51 @@ ${recBlock}
 <a href="${p.reportUrl}" style="display:inline-block;background:#006ea0;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:999px;">${escapeHtml(p.cta)}</a>
 </td></tr>
 ${fallbackRow}
+<tr><td style="padding:0 28px 28px 28px;font-size:13px;line-height:1.5;color:#7a8a99;">${p.footer}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
+function buildContactThankYouHtml(p: ContactThankYouParams): string {
+  const preheaderRow = `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${escapeHtml(p.preheader)}</div>`;
+  const bulletItems = p.bulletItems
+    .map((item) => `<li style="margin:0 0 8px 0;">${escapeHtml(item)}</li>`)
+    .join("");
+
+  return `<!DOCTYPE html>
+<html lang="${p.lang}">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/></head>
+<body style="margin:0;background:#0f1419;font-family:Segoe UI,system-ui,sans-serif;">
+${preheaderRow}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0f1419;padding:32px 16px;">
+<tr><td align="center">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#151b24;border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;">
+<tr><td style="padding:28px 28px 8px 28px;">
+<img src="${p.logoUrl}" alt="Aurora" width="200" height="40" style="display:block;width:200px;max-width:100%;height:auto;border:0;outline:none;"/>
+</td></tr>
+<tr><td style="padding:8px 28px 8px 28px;font-size:21px;font-weight:700;color:#f0f4f8;line-height:1.3;">${escapeHtml(p.headline)}</td></tr>
+<tr><td style="padding:0 28px 16px 28px;font-size:15px;line-height:1.55;color:#a8b4c0;">${p.greeting}</td></tr>
+<tr><td style="padding:0 28px 16px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.intro)}</td></tr>
+<tr><td style="padding:0 28px 10px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.leadIn)}</td></tr>
+<tr><td style="padding:0 28px 18px 28px;">
+<ul style="margin:0;padding:0 0 0 20px;color:#a8b4c0;font-size:14px;line-height:1.55;">
+${bulletItems}
+</ul>
+</td></tr>
+<tr><td style="padding:0 28px 12px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.ctaIntro)}</td></tr>
+<tr><td style="padding:0 28px 24px 28px;">
+<a href="${p.meetingUrl}" style="display:inline-block;background:#006ea0;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:999px;">${escapeHtml(p.cta)}</a>
+</td></tr>
+<tr><td style="padding:0 28px 22px 28px;font-size:12px;line-height:1.5;color:#7a8a99;word-break:break-all;">
+${escapeHtml(p.fallbackLinkLabel)}<br/>
+<span style="color:#94a3b8;">${p.plainMeetingUrl}</span>
+</td></tr>
+<tr><td style="padding:0 28px 16px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.afterCta)}</td></tr>
+<tr><td style="padding:0 28px 18px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.replyLine)}</td></tr>
+<tr><td style="padding:0 28px 28px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${p.signature}</td></tr>
 <tr><td style="padding:0 28px 28px 28px;font-size:13px;line-height:1.5;color:#7a8a99;">${p.footer}</td></tr>
 </table>
 </td></tr>

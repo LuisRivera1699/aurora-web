@@ -96,7 +96,7 @@ export function ContactForm({
   messagePlaceholder,
   formLocation = "home",
 }: ContactFormProps = {}) {
-  const { contact, contactForm } = useSiteMessages();
+  const { contact, contactForm, locale } = useSiteMessages();
   const formRef = useRef<HTMLFormElement>(null);
   const serviceSelectRef = useRef<HTMLSelectElement>(null);
   const [state, dispatch] = useReducer(formReducer, {
@@ -164,6 +164,7 @@ export function ContactForm({
         company,
         phone,
         requirementType,
+        uiLocale: locale,
       });
       pushGenerateLeadEvent(formLocation);
       dispatch({ type: "success" });

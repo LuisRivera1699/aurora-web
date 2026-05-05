@@ -23,6 +23,21 @@ export type ProfilerSubmitResponse = {
   reportId: string;
 };
 
+export type ContactLeadSubmitPayload = {
+  name: string;
+  email: string;
+  message: string;
+  company: string;
+  phone: string;
+  requirementType: string;
+  uiLocale: "es" | "en";
+  userAgent?: string;
+};
+
+export type ContactLeadSubmitResponse = {
+  leadId: string;
+};
+
 export async function callProcessProfilerAnswers(
   data: ProfilerSubmitPayload,
 ): Promise<HttpsCallableResult<ProfilerSubmitResponse>> {
@@ -30,6 +45,17 @@ export async function callProcessProfilerAnswers(
   const callable = httpsCallable<ProfilerSubmitPayload, ProfilerSubmitResponse>(
     fn,
     "processProfilerAnswers",
+  );
+  return callable(data);
+}
+
+export async function callSubmitContactLead(
+  data: ContactLeadSubmitPayload,
+): Promise<HttpsCallableResult<ContactLeadSubmitResponse>> {
+  const fn = getFunctions(getFirebaseApp(), getFunctionsRegion());
+  const callable = httpsCallable<ContactLeadSubmitPayload, ContactLeadSubmitResponse>(
+    fn,
+    "submitContactLead",
   );
   return callable(data);
 }

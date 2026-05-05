@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processProfilerAnswers = void 0;
+exports.submitContactLead = exports.processProfilerAnswers = void 0;
 const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
 const v2_1 = require("firebase-functions/v2");
@@ -49,10 +49,58 @@ if (!(0, app_1.getApps)().length) {
     (0, app_1.initializeApp)();
 }
 const COLLECTION = process.env.DIAGNOSTICS_COLLECTION ?? "diagnostics";
+const CONTACT_COLLECTION = process.env.CONTACT_COLLECTION ??
+    process.env.NEXT_PUBLIC_FIRESTORE_CONTACT_COLLECTION ??
+    "contact_requests";
 /** Callable público (sin login): captura de leads; endurecer con App Check en producción si aplica. */
 exports.processProfilerAnswers = (0, https_1.onCall)({ cors: true, timeoutSeconds: 120, memory: "512MiB" }, async (request) => {
     return runProfiler(request.data);
 });
+/** Callable público (sin login): captura leads y envía confirmación al usuario. */
+exports.submitContactLead = (0, https_1.onCall)({ cors: true, timeoutSeconds: 30, memory: "256MiB" }, async (request) => {
+    return runSubmitContactLead(request.data);
+});
+async function runSubmitContactLead(raw) {
+    const parsed = schemas_js_1.contactLeadInputSchema.safeParse(raw);
+    if (!parsed.success) {
+        logger.warn("Invalid contact lead payload", {
+            issues: parsed.error.issues.length,
+        });
+        throw new https_1.HttpsError("invalid-argument", "Invalid payload");
+    }
+    const input = parsed.data;
+    const db = (0, firestore_1.getFirestore)();
+    const docRef = db.collection(CONTACT_COLLECTION).doc();
+    const now = new Date().toISOString();
+    await docRef.set({
+        name: input.name.trim().slice(0, 200),
+        email: input.email.trim().toLowerCase().slice(0, 320),
+        message: input.message.trim().slice(0, 8000),
+        company: input.company.trim().slice(0, 200),
+        phone: input.phone.trim().slice(0, 80),
+        requirementType: input.requirementType.trim().slice(0, 64),
+        uiLocale: input.uiLocale,
+        userAgent: input.userAgent ?? "",
+        source: "aurora-web",
+        emailSent: false,
+        createdAt: now,
+    });
+    try {
+        await (0, resend_js_1.sendContactThankYouEmail)({
+            to: input.email,
+            name: input.name,
+            language: input.uiLocale,
+        });
+        await docRef.update({
+            emailSent: true,
+            emailSentAt: firestore_1.FieldValue.serverTimestamp(),
+        });
+    }
+    catch (emailErr) {
+        logger.error("Contact thank-you email failed", emailErr);
+    }
+    return { leadId: docRef.id };
+}
 async function runProfiler(raw) {
     const parsed = schemas_js_1.profilerInputSchema.safeParse(raw);
     if (!parsed.success) {

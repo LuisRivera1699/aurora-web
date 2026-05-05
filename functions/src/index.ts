@@ -6,12 +6,18 @@ import * as logger from "firebase-functions/logger";
 import { invokeClaudeJson, extractJsonObject } from "./bedrock.js";
 import { PROMPT_BUNDLE_VERSION, SYSTEM_BUNDLE, buildProfilerContext } from "./prompts.js";
 import {
+  contactLeadInputSchema,
   profilerInputSchema,
   aiBundleSchema,
+  type ContactLeadInput,
   type ProfilerInput,
 } from "./schemas.js";
 import { computeScores } from "./scores.js";
-import { sendDiagnosticEmail, type EmailPrimaryRecommendation } from "./resend.js";
+import {
+  sendContactThankYouEmail,
+  sendDiagnosticEmail,
+  type EmailPrimaryRecommendation,
+} from "./resend.js";
 
 setGlobalOptions({ region: "us-central1", maxInstances: 20 });
 
@@ -20,6 +26,10 @@ if (!getApps().length) {
 }
 
 const COLLECTION = process.env.DIAGNOSTICS_COLLECTION ?? "diagnostics";
+const CONTACT_COLLECTION =
+  process.env.CONTACT_COLLECTION ??
+  process.env.NEXT_PUBLIC_FIRESTORE_CONTACT_COLLECTION ??
+  "contact_requests";
 
 /** Callable público (sin login): captura de leads; endurecer con App Check en producción si aplica. */
 export const processProfilerAnswers = onCall(
@@ -28,6 +38,59 @@ export const processProfilerAnswers = onCall(
     return runProfiler(request.data);
   },
 );
+
+/** Callable público (sin login): captura leads y envía confirmación al usuario. */
+export const submitContactLead = onCall(
+  { cors: true, timeoutSeconds: 30, memory: "256MiB" },
+  async (request) => {
+    return runSubmitContactLead(request.data);
+  },
+);
+
+async function runSubmitContactLead(raw: unknown): Promise<{ leadId: string }> {
+  const parsed = contactLeadInputSchema.safeParse(raw);
+  if (!parsed.success) {
+    logger.warn("Invalid contact lead payload", {
+      issues: parsed.error.issues.length,
+    });
+    throw new HttpsError("invalid-argument", "Invalid payload");
+  }
+
+  const input: ContactLeadInput = parsed.data;
+  const db = getFirestore();
+  const docRef = db.collection(CONTACT_COLLECTION).doc();
+  const now = new Date().toISOString();
+
+  await docRef.set({
+    name: input.name.trim().slice(0, 200),
+    email: input.email.trim().toLowerCase().slice(0, 320),
+    message: input.message.trim().slice(0, 8000),
+    company: input.company.trim().slice(0, 200),
+    phone: input.phone.trim().slice(0, 80),
+    requirementType: input.requirementType.trim().slice(0, 64),
+    uiLocale: input.uiLocale,
+    userAgent: input.userAgent ?? "",
+    source: "aurora-web",
+    emailSent: false,
+    createdAt: now,
+  });
+
+  try {
+    await sendContactThankYouEmail({
+      to: input.email,
+      name: input.name,
+      language: input.uiLocale,
+    });
+    await docRef.update({
+      emailSent: true,
+      emailSentAt: FieldValue.serverTimestamp(),
+    });
+  } catch (emailErr) {
+    logger.error("Contact thank-you email failed", emailErr);
+  }
+
+  return { leadId: docRef.id };
+}
 
 async function runProfiler(raw: unknown): Promise<{ reportId: string }> {
   const parsed = profilerInputSchema.safeParse(raw);
