@@ -14,6 +14,8 @@ async function sendDiagnosticEmail(opts) {
     const siteUrl = (process.env.SITE_URL ?? "https://www.teamaurora.pe").replace(/\/$/, "");
     /** Horizontal wordmark (~5:1); do not force square dimensions in HTML. */
     const logoUrl = process.env.EMAIL_LOGO_URL ?? `${siteUrl}/brand_assets/LOGO_WHITE.svg`;
+    const diagnosticMeetingUrl = process.env.DIAGNOSTIC_MEETING_URL ??
+        "https://cal.com/aurora-software-factory/15min-diagnostic";
     const titleForSubject = opts.reportTitle?.trim();
     const subject = opts.language === "es"
         ? titleForSubject
@@ -58,8 +60,8 @@ async function sendDiagnosticEmail(opts) {
         preheader: "En el informe: nivel de oportunidad, ideas clave, riesgos, recomendación y próximos pasos.",
         headline: opts.reportTitle?.trim() ||
             "Tu informe ya está listo: contexto, riesgos y qué hacer después",
-        name: escapeHtml(opts.name),
-        intro: "Preparamos un análisis orientativo con lo que compartiste: no sustituye una reunión, pero sí ordena el panorama. En el informe encontrarás ideas clave, riesgos a considerar, una recomendación y próximos pasos concretos — además del detalle que ves resumido abajo.",
+        greeting: `Hola ${escapeHtml(opts.name)},`,
+        intro: "Ya preparamos tu diagnóstico en base a lo que nos compartiste. No reemplaza una reunión, pero te da una visión clara de por dónde empezar y qué evitar.",
         opportunityBadge: oppLabelEs ? `Nivel de oportunidad: ${oppLabelEs}` : "",
         primarySectionTitle: "Enfoque sugerido",
         primaryLine: primaryLineEs,
@@ -67,22 +69,36 @@ async function sendDiagnosticEmail(opts) {
         insightItems: insights,
         execSummaryTitle: "Resumen ejecutivo",
         summaryHtml,
-        recTeaserTitle: "Adelanto de la recomendación",
+        recTeaserTitle: "Recomendación principal",
         recTeaserHtml,
+        nextStepTitle: "Siguiente paso",
+        nextStepIntro: "Si quieres llevar esto a algo real, te recomiendo agendar una llamada con nosotros.",
+        nextStepItems: [
+            "Bajamos el diagnóstico a tu caso específico",
+            "Te damos un plan más concreto",
+            "Definimos cómo implementarlo correctamente",
+        ],
+        meetingCtaIntro: "Puedes agendar aquí directamente:",
+        meetingCta: "Agendar llamada de diagnóstico",
+        meetingUrl: escapeHtml(diagnosticMeetingUrl),
+        plainMeetingUrl: escapeHtml(diagnosticMeetingUrl),
+        reportIntro: "También puedes revisar el informe completo aquí:",
         cta: "Abrir informe completo",
-        fallbackLinkLabel: "Si el botón no funciona, copia y pega este enlace en el navegador:",
+        fallbackLinkLabel: "Si el botón no funciona, copia y pega este enlace:",
         reportUrl: safeReportUrl,
         plainReportUrl: escapeHtml(plainUrlForEmail),
+        replyLine: "Si tienes dudas puntuales, responde este correo y lo vemos contigo.",
+        signature: "Quedo atento,<br/>Luis Rivera<br/>Aurora Managing Director",
         logoUrl: escapeHtml(logoUrl),
-        footer: `© Aurora · <a href="${escapeHtml(siteUrl)}" style="color:#7a8a99;text-decoration:none;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a>`,
+        footer: buildFooter(siteUrl),
     });
     const htmlEn = buildBrandedHtml({
         lang: "en",
         preheader: "In the report: opportunity level, key insights, risks, recommendation, and next steps.",
         headline: opts.reportTitle?.trim() ||
             "Your report is ready: context, risks, and what to do next",
-        name: escapeHtml(opts.name),
-        intro: "We prepared an orientative analysis from what you shared — it doesn’t replace a conversation, but it frames the situation. Inside you’ll find key insights, risks, a clear recommendation, and concrete next steps, plus the detail summarized below.",
+        greeting: `Hi ${escapeHtml(opts.name)},`,
+        intro: "We prepared your diagnostic based on what you shared. It does not replace a meeting, but it gives you a clear view of where to start and what to avoid.",
         opportunityBadge: oppLabelEn ? `Opportunity level: ${oppLabelEn}` : "",
         primarySectionTitle: "Suggested focus",
         primaryLine: primaryLineEn,
@@ -90,14 +106,28 @@ async function sendDiagnosticEmail(opts) {
         insightItems: insights,
         execSummaryTitle: "Executive summary",
         summaryHtml,
-        recTeaserTitle: "Recommendation preview",
+        recTeaserTitle: "Main recommendation",
         recTeaserHtml,
+        nextStepTitle: "Next step",
+        nextStepIntro: "If you want to turn this into something real, I recommend booking a call with us.",
+        nextStepItems: [
+            "We adapt the diagnostic to your specific case",
+            "We give you a more concrete plan",
+            "We define how to implement it correctly",
+        ],
+        meetingCtaIntro: "You can book directly here:",
+        meetingCta: "Book diagnostic call",
+        meetingUrl: escapeHtml(diagnosticMeetingUrl),
+        plainMeetingUrl: escapeHtml(diagnosticMeetingUrl),
+        reportIntro: "You can also review the full report here:",
         cta: "Open full report",
-        fallbackLinkLabel: "If the button doesn’t work, copy and paste this link into your browser:",
+        fallbackLinkLabel: "If the button does not work, copy and paste this link:",
         reportUrl: safeReportUrl,
         plainReportUrl: escapeHtml(plainUrlForEmail),
+        replyLine: "If you have specific questions, reply to this email and we will review them with you.",
+        signature: "Best,<br/>Luis Rivera<br/>Aurora Managing Director",
         logoUrl: escapeHtml(logoUrl),
-        footer: `© Aurora · <a href="${escapeHtml(siteUrl)}" style="color:#7a8a99;text-decoration:none;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a>`,
+        footer: buildFooter(siteUrl),
     });
     await resend.emails.send({
         from,
@@ -208,6 +238,9 @@ function formatPreviewBlock(text, max) {
 }
 function buildBrandedHtml(p) {
     const preheaderRow = `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${escapeHtml(p.preheader)}</div>`;
+    const nextStepItems = p.nextStepItems
+        .map((item) => `<li style="margin:0 0 8px 0;">${escapeHtml(item)}</li>`)
+        .join("");
     const badgeRow = p.opportunityBadge
         ? `<tr><td style="padding:0 28px 12px 28px;font-size:13px;color:#006ea0;font-weight:600;border-left:3px solid #006ea0;padding-left:25px;">${escapeHtml(p.opportunityBadge)}</td></tr>`
         : "";
@@ -239,6 +272,24 @@ ${p.insightItems.map((item) => `<li style="margin:0 0 8px 0;">${item}</li>`).joi
 <div style="font-size:14px;line-height:1.55;color:#a8b4c0;font-style:italic;">${p.recTeaserHtml}</div>
 </td></tr>`
         : "";
+    const nextStepRow = `<tr><td style="padding:6px 28px 22px 28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:rgba(125,211,252,0.07);border-radius:14px;border:1px solid rgba(125,211,252,0.18);">
+<tr><td style="padding:18px 18px 8px 18px;font-size:18px;font-weight:700;color:#f0f4f8;line-height:1.35;">${escapeHtml(p.nextStepTitle)}</td></tr>
+<tr><td style="padding:0 18px 12px 18px;font-size:14px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.nextStepIntro)}</td></tr>
+<tr><td style="padding:0 18px 14px 18px;">
+<ul style="margin:0;padding:0 0 0 20px;color:#a8b4c0;font-size:14px;line-height:1.55;">
+${nextStepItems}
+</ul>
+</td></tr>
+<tr><td style="padding:0 18px 12px 18px;font-size:14px;line-height:1.6;color:#c5d0dc;">${escapeHtml(p.meetingCtaIntro)}</td></tr>
+<tr><td style="padding:0 18px 18px 18px;">
+<a href="${p.meetingUrl}" style="display:inline-block;background:#006ea0;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:13px 24px;border-radius:999px;">${escapeHtml(p.meetingCta)}</a>
+</td></tr>
+<tr><td style="padding:0 18px 18px 18px;font-size:12px;line-height:1.5;color:#7a8a99;word-break:break-all;">
+<span style="color:#94a3b8;">${p.plainMeetingUrl}</span>
+</td></tr>
+</table>
+</td></tr>`;
     const fallbackRow = `<tr><td style="padding:0 28px 24px 28px;font-size:12px;line-height:1.5;color:#7a8a99;word-break:break-all;">
 ${escapeHtml(p.fallbackLinkLabel)}<br/>
 <span style="color:#94a3b8;">${p.plainReportUrl}</span>
@@ -255,17 +306,21 @@ ${preheaderRow}
 <img src="${p.logoUrl}" alt="Aurora" width="200" height="40" style="display:block;width:200px;max-width:100%;height:auto;border:0;outline:none;"/>
 </td></tr>
 <tr><td style="padding:8px 28px 8px 28px;font-size:21px;font-weight:700;color:#f0f4f8;line-height:1.3;">${escapeHtml(p.headline)}</td></tr>
-<tr><td style="padding:0 28px 16px 28px;font-size:15px;line-height:1.55;color:#a8b4c0;">Hola ${p.name},</td></tr>
+<tr><td style="padding:0 28px 16px 28px;font-size:15px;line-height:1.55;color:#a8b4c0;">${p.greeting}</td></tr>
 <tr><td style="padding:0 28px 18px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.intro)}</td></tr>
 ${badgeRow}
 ${primaryRow}
 ${insightsRow}
 ${summaryBlock}
 ${recBlock}
-<tr><td style="padding:8px 28px 24px 28px;">
+${nextStepRow}
+<tr><td style="padding:2px 28px 12px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.reportIntro)}</td></tr>
+<tr><td style="padding:0 28px 24px 28px;">
 <a href="${p.reportUrl}" style="display:inline-block;background:#006ea0;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:999px;">${escapeHtml(p.cta)}</a>
 </td></tr>
 ${fallbackRow}
+<tr><td style="padding:0 28px 18px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${escapeHtml(p.replyLine)}</td></tr>
+<tr><td style="padding:0 28px 28px 28px;font-size:15px;line-height:1.65;color:#c5d0dc;">${p.signature}</td></tr>
 <tr><td style="padding:0 28px 28px 28px;font-size:13px;line-height:1.5;color:#7a8a99;">${p.footer}</td></tr>
 </table>
 </td></tr>
